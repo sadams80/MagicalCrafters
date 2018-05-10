@@ -1,5 +1,5 @@
 ﻿
-namespace MagicalCrafters.Models
+namespace MagicalCrafters.DAL.Models.DAL
 {
     public class Skill_Levels
     {

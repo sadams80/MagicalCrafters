@@ -1,9 +1,8 @@
 ﻿using System;
-using System.ComponentModel.DataAnnotations;
 
-namespace MagicalCrafters.Models
+namespace MagicalCrafters.BLL.Models.BLL
 {
-    public class Flagged_Items : Sources
+    public class Flagged_Items
     {
         public int Flag_Id { get; set; }
         public int User_Id { get; set; }

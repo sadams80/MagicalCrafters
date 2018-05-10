@@ -1,7 +1,6 @@
 ﻿using System;
-using System.ComponentModel.DataAnnotations;
 
-namespace MagicalCrafters.Models
+namespace MagicalCrafters.DAL.Models.DAL
 {
     public class Crafts : Users_Info
     {

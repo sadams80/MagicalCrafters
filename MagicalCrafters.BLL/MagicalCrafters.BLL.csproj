@@ -40,10 +40,22 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Models.BLL\Announcements.cs" />
+    <Compile Include="Models.BLL\Comments.cs" />
+    <Compile Include="Models.BLL\Completed_Projects.cs" />
+    <Compile Include="Models.BLL\Crafts.cs" />
+    <Compile Include="Models.BLL\Favorite_Projects.cs" />
+    <Compile Include="Models.BLL\Flagged_Items.cs" />
+    <Compile Include="Models.BLL\Houses.cs" />
+    <Compile Include="Models.BLL\Ongoing_Projects.cs" />
+    <Compile Include="Models.BLL\Projects.cs" />
+    <Compile Include="Models.BLL\Roles.cs" />
+    <Compile Include="Models.BLL\Skill_Levels.cs" />
+    <Compile Include="Models.BLL\Sources.cs" />
+    <Compile Include="Models.BLL\Users.cs" />
+    <Compile Include="Models.BLL\Users_Info.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Models.BLL\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

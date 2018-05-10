@@ -1,14 +1,14 @@
 ﻿using System;
-using System.ComponentModel.DataAnnotations;
 
-namespace MagicalCrafters.Models
+namespace MagicalCrafters.DAL.Models.DAL
 {
-    public class Crafts : Users_Info
+    public class Projects : Crafts
     {
-        public int Craft_Id { get; set; }
+        public int Project_Id { get; set; }
         public new int Source_Id { get; set; }
+        public int Skill_Id { get; set; }
         public new string Name { get; set; }
-        public string Description { get; set; }
+        public string Body { get; set; }
         public new bool isFlagged { get; set; }
         public new bool isDeleted { get; set; }
         public new DateTime CreatedDate { get; set; }

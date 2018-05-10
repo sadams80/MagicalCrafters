@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace MagicalCrafters.Models
 {
-    public class Projects :Crafts
+    public class Projects : Crafts
     {
         public int Project_Id { get; set; }
         public new int Source_Id { get; set; }

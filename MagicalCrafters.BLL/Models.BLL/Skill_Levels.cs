@@ -1,5 +1,6 @@
 ﻿
-namespace MagicalCrafters.Models
+
+namespace MagicalCrafters.BLL.Models.BLL
 {
     public class Skill_Levels
     {

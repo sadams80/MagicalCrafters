@@ -1,7 +1,6 @@
 ﻿using System;
-using System.ComponentModel.DataAnnotations;
 
-namespace MagicalCrafters.Models
+namespace MagicalCrafters.BLL.Models.BLL
 {
     public class Crafts : Users_Info
     {

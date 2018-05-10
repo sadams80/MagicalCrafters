@@ -111,6 +111,8 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Mappers\Mappers_BLL.cs" />
+    <Compile Include="Mappers\Mappers_DAL.cs" />
     <Compile Include="Models\Announcements.cs" />
     <Compile Include="Models\Comments.cs" />
     <Compile Include="Models\Completed_Projects.cs" />
@@ -140,7 +142,6 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Controllers\" />
-    <Folder Include="Mappers\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MagicalCrafters.BLL\MagicalCrafters.BLL.csproj">
