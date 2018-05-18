@@ -1,14 +1,13 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
 
-namespace MagicalCrafters.Models
+namespace MagicalCrafters.BLL.Models.BLL
 {
-    public class Houses
+    public class HousesBLL
     {
         public int House_Id { get; set; }
         public int Source_Id { get; set; }
         public string Name { get; set; }
         public string Motto { get; set; }
         public long Points { get; set; }
-        public Users_Info Users_Info { get; set; }
     }
 }
