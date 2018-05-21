@@ -131,6 +131,7 @@
     <Compile Include="Models\Sources.cs" />
     <Compile Include="Models\Users.cs" />
     <Compile Include="Models\Users_Info.cs" />
+    <Compile Include="Models\ViewModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

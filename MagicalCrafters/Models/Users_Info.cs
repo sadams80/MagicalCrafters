@@ -8,6 +8,7 @@ namespace MagicalCrafters.Models
         public int User_Id { get; set; }
         public int Role_Id { get; set; }
         public int Source_Id { get; set; }
+        public int House_Id { get; set; }
         public string Email { get; set; }
         public bool isFlagged { get; set; }
         public bool isDeleted { get; set; }
@@ -17,5 +18,6 @@ namespace MagicalCrafters.Models
         public int Points { get; set; }
         public Houses House { get; set; }
         public Users User { get; set; }
+        public Roles Role { get; set; }
     }
 }

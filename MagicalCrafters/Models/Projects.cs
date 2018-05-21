@@ -6,7 +6,9 @@ namespace MagicalCrafters.Models
     public class Projects
     {
         public int Project_Id { get; set; }
+        public int User_Id { get; set; }
         public int Source_Id { get; set; }
+        public int Craft_Id { get; set; }
         public int Skill_Id { get; set; }
         public string Name { get; set; }
         public string Body { get; set; }
@@ -18,5 +20,6 @@ namespace MagicalCrafters.Models
         public Users User { get; set; }
         public Users_Info User_Info { get; set; }
         public Crafts Craft { get; set; }
+        public Skill_Levels Skill_Level { get; set; }
     }
 }

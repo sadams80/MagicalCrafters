@@ -8,5 +8,6 @@ namespace MagicalCrafters.DAL.Models.DAL
         public string Name { get; set; }
         public string Motto { get; set; }
         public long Points { get; set; }
+        public Users_InfoDAL Users_Info { get; set; }
     }
 }

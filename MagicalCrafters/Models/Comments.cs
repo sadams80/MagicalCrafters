@@ -13,7 +13,6 @@ namespace MagicalCrafters.Models
         public DateTime CreatedDate { get; set; }
         public string LastModifiedBy { get; set; }
         public DateTime LastModifiedDate { get; set; }
-        public bool Completed { get; set; }
         public bool isFlagged { get; set; }
         public bool isDeleted { get; set; }
     }
