@@ -2,7 +2,7 @@
 
 namespace MagicalCrafters.DAL.Models.DAL
 {
-    public class Flagged_ItemsDA
+    public class Flagged_ItemsDAL
     {
         public int Flag_Id { get; set; }
         public int User_Id { get; set; }

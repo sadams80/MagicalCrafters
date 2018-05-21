@@ -9,6 +9,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MagicalCrafters.BLL", "Magi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MagicalCrafters.DAL", "MagicalCrafters.DAL\MagicalCrafters.DAL.csproj", "{0FEBB114-DAFD-4868-BC66-EC475985B779}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{FED07022-34B3-4863-ADF1-8D7ECB4AB2FE}"
+	ProjectSection(SolutionItems) = preProject
+		Error_Log.txt = Error_Log.txt
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
