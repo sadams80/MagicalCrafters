@@ -1,0 +1,6 @@
+C:\Users\Onshore\source\repos\MagicalCrafters\MagicalCrafters.BLL\bin\Debug\MagicalCrafters.BLL.dll
+C:\Users\Onshore\source\repos\MagicalCrafters\MagicalCrafters.BLL\bin\Debug\MagicalCrafters.BLL.pdb
+C:\Users\Onshore\source\repos\MagicalCrafters\MagicalCrafters.BLL\obj\Debug\MagicalCrafters.BLL.csprojAssemblyReference.cache
+C:\Users\Onshore\source\repos\MagicalCrafters\MagicalCrafters.BLL\obj\Debug\MagicalCrafters.BLL.csproj.CoreCompileInputs.cache
+C:\Users\Onshore\source\repos\MagicalCrafters\MagicalCrafters.BLL\obj\Debug\MagicalCrafters.BLL.dll
+C:\Users\Onshore\source\repos\MagicalCrafters\MagicalCrafters.BLL\obj\Debug\MagicalCrafters.BLL.pdb

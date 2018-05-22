@@ -1,0 +1,5 @@
+C:\Users\Onshore\source\repos\MagicalCrafters\MagicalCrafters.DAL\bin\Debug\MagicalCrafters.DAL.dll
+C:\Users\Onshore\source\repos\MagicalCrafters\MagicalCrafters.DAL\bin\Debug\MagicalCrafters.DAL.pdb
+C:\Users\Onshore\source\repos\MagicalCrafters\MagicalCrafters.DAL\obj\Debug\MagicalCrafters.DAL.csproj.CoreCompileInputs.cache
+C:\Users\Onshore\source\repos\MagicalCrafters\MagicalCrafters.DAL\obj\Debug\MagicalCrafters.DAL.dll
+C:\Users\Onshore\source\repos\MagicalCrafters\MagicalCrafters.DAL\obj\Debug\MagicalCrafters.DAL.pdb
