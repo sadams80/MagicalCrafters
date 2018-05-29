@@ -35,3 +35,4 @@ C:\Users\Onshore\source\repos\MagicalCrafters\MagicalCrafters\obj\Debug\MagicalC
 C:\Users\Onshore\source\repos\MagicalCrafters\MagicalCrafters\obj\Debug\MagicalCrafters.csproj.CopyComplete
 C:\Users\Onshore\source\repos\MagicalCrafters\MagicalCrafters\obj\Debug\MagicalCrafters.dll
 C:\Users\Onshore\source\repos\MagicalCrafters\MagicalCrafters\obj\Debug\MagicalCrafters.pdb
+C:\Users\Onshore\source\repos\MagicalCrafters\MagicalCrafters\bin\MagicalCrafters.DAL.dll.config

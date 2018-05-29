@@ -7,22 +7,21 @@ using MagicalCrafters.Models;
 using MagicalCrafters.Mappers;
 using MagicalCrafters.DAL;
 using MagicalCrafters.DAL.Models.DAL;
-using AutoMapper;
 
 namespace MagicalCrafters.Controllers
 {
     public class UsersController : Controller
     {
         #region Objects
-        static Users _user = new Users();
-        static UsersAccess _userAccess = new UsersAccess();
-        protected Mapper _mapper;
+        public static Users _user = new Users();
+        public static UsersAccess _userAccess = new UsersAccess();
+        public static Mappers_DAL _mappersDAL = new Mappers_DAL();
         #endregion
 
         #region Index
         public ActionResult Index()
         {
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Index", "Home", new { area = "" });
         }
         #endregion
 
@@ -46,12 +45,13 @@ namespace MagicalCrafters.Controllers
         #endregion
 
         #region Get
-        public ActionResult GetUser(int userId)
+        public ActionResult GetUser()
         {
-            Users user = new Users();
+            int userId = 1;
             ViewModels userVM = new ViewModels();
-            user = _mapper.Map<Users>(_userAccess.GetUser(userId));
-            return View();
+            userVM.SingleUser = _mappersDAL.Map(_userAccess.GetUser(userId));
+            //userVM.SingleUsers_Info = _mappersDAL.MapUserInfo(userVM.SingleUser.User_Info);
+            return View(userVM);
         }
 
         public ActionResult GetUsers()

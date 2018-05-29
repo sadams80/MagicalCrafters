@@ -1,7 +1,52 @@
-﻿
+﻿@model MagicalCrafters.Models.ViewModels
+@using MagicalCrafters.Models
 @{
-    ViewBag.Title = "GetUser";
+    ViewBag.Title = "Account";
 }
 
 <h2>View User</h2>
 
+<table class="table" tableFormat>
+    <tr>
+        <th colspan="2" align="center">Account For: @Html.DisplayFor(m => m.SingleUser.UserName)</th>
+    </tr>
+    <tr>
+        <td>Email</td>
+        <td>@Html.DisplayFor(m => m.SingleUser.User_Info.Email)</td>
+    </tr>
+    <tr>
+        <td>House</td>
+        @if (Model.SingleUser.User_Info.House_Id == 1)
+        {
+            <td>Gryffindor</td>
+        }
+        @if (Model.SingleUser.User_Info.House_Id == 2)
+        {
+            <td>Slytherin</td>
+        }
+        @if (Model.SingleUser.User_Info.House_Id == 3)
+        {
+            <td>Ravenclaw</td>
+        }
+        @if (Model.SingleUser.User_Info.House_Id == 4)
+        {
+            <td>Hufflepuff</td>
+        }
+    </tr>
+    <tr>
+        <td>Points</td>
+        <td>@Html.DisplayFor(m => m.SingleUser.User_Info.Points)</td>
+    </tr>
+    <tr>
+        <td>Created Date</td>
+        <td>@Html.DisplayFor(m => m.SingleUser.User_Info.CreatedDate)</td>
+    </tr>
+    <tr>
+        <td>Last Modified By</td>
+        <td>@Html.DisplayFor(m => m.SingleUser.User_Info.LastModifiedBy)</td>
+    </tr>
+    <tr>
+        <td>Last Modified Date</td>
+        <td>@Html.DisplayFor(m => m.SingleUser.User_Info.LastModifiedDate)</td>
+    </tr>
+</table>

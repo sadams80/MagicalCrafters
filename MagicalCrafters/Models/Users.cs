@@ -10,7 +10,10 @@ namespace MagicalCrafters.Models
         public string Salt { get; set; }
         public bool isBlocked { get; set; }
         public Users_Info User_Info { get; set; }
-        public Houses House { get; set; }
-        public Roles Role { get; set; }
+
+        public Users()
+        {
+            User_Info = new Users_Info();
+        }
     }
 }

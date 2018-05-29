@@ -20,6 +20,7 @@ namespace MagicalCrafters.DAL
         {
             //UsersDAL user = new UsersDAL();
             DataTable user = new DataTable();
+            UsersDAL userToGet = new UsersDAL();
             SqlConnection con = new SqlConnection(_connectionString);
             SqlCommand cmd = new SqlCommand("sp_GetUserById", con);
             cmd.CommandType = CommandType.StoredProcedure;
@@ -32,6 +33,18 @@ namespace MagicalCrafters.DAL
                 {
                     adapter.Fill(user);
                 }
+
+                userToGet.User_Id = Convert.ToInt32(user.Rows[0]["User_Id"]);
+                userToGet.UserName = user.Rows[0]["UserName"].ToString();
+                userToGet.User_Info.Role_Id = Convert.ToInt32(user.Rows[0]["Role_Id"]);
+                userToGet.User_Info.Source_Id = Convert.ToInt32(user.Rows[0]["Source_Id"]);
+                userToGet.User_Info.House_Id = Convert.ToInt32(user.Rows[0]["House_Id"]);
+                userToGet.User_Info.Email = user.Rows[0]["Email"].ToString();
+                userToGet.User_Info.isFlagged = Convert.ToBoolean(user.Rows[0]["isFlagged"]);
+                userToGet.User_Info.CreatedDate = Convert.ToDateTime(user.Rows[0]["CreatedDate"]);
+                userToGet.User_Info.LastModifiedBy = user.Rows[0]["LastModifiedBy"].ToString();
+                userToGet.User_Info.LastModifiedDate = Convert.ToDateTime(user.Rows[0]["LastModifiedDate"]);
+                userToGet.User_Info.Points = Convert.ToInt32(user.Rows[0]["Points"]);
             }
             catch (Exception error)
             {
@@ -46,17 +59,6 @@ namespace MagicalCrafters.DAL
 
             }
 
-            UsersDAL userToGet = new UsersDAL();
-            userToGet.User_Id = Convert.ToInt32(user.Rows[0]["User_Id"]);
-            userToGet.UserName = user.Rows[0]["UserName"].ToString();
-            userToGet.User_Info.Role_Id = Convert.ToInt32(user.Rows[0]["Role_ID"]);
-            userToGet.User_Info.Source_Id = Convert.ToInt32(user.Rows[0]["Source_Id"]);
-            userToGet.User_Info.House_Id = Convert.ToInt32(user.Rows[0]["House_Id"]);
-            userToGet.User_Info.Email = user.Rows[0]["Email"].ToString();
-            userToGet.User_Info.isFlagged = Convert.ToBoolean(user.Rows[0]["isFlagged"]);
-            userToGet.User_Info.CreatedDate = Convert.ToDateTime(user.Rows[0]["CreatedDate"]);
-            userToGet.User_Info.LastModifiedBy = user.Rows[0]["LastModifiedBy"].ToString();
-            userToGet.User_Info.LastModifiedDate = Convert.ToDateTime(user.Rows[0]["LastModifiedDate"]);
             return userToGet;
         }
     }

@@ -11,13 +11,18 @@ namespace MagicalCrafters.Models
         public int House_Id { get; set; }
         public string Email { get; set; }
         public bool isFlagged { get; set; }
-        public bool isDeleted { get; set; }
+        //public bool isDeleted { get; set; }
         public DateTime CreatedDate { get; set; }
         public string LastModifiedBy { get; set; }
         public DateTime LastModifiedDate { get; set; }
         public int Points { get; set; }
         public Houses House { get; set; }
-        public Users User { get; set; }
         public Roles Role { get; set; }
+
+        public Users_Info()
+        {
+            House = new Houses();
+            Role = new Roles();
+        }
     }
 }
