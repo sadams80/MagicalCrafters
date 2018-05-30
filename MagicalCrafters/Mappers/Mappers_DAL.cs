@@ -1,5 +1,6 @@
 ﻿using MagicalCrafters.DAL.Models.DAL;
 using MagicalCrafters.Models;
+using System.Collections.Generic;
 
 namespace MagicalCrafters.Mappers
 {
@@ -86,6 +87,16 @@ namespace MagicalCrafters.Mappers
             userDAL.User_Info.LastModifiedDate = user.User_Info.LastModifiedDate;
             userDAL.User_Info.Points = user.User_Info.Points;
             return userDAL;
+        }
+
+        public List<Users> Map (List<UsersDAL> usersDAL)
+        {
+            List<Users> users = new List<Users>();
+            foreach (UsersDAL userDAL in usersDAL)
+            {
+                users.Add(Map(userDAL));
+            }
+            return users;       //add getusers view, fix that up, add a link to the layout
         }
         #endregion
 

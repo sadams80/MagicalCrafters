@@ -14,7 +14,7 @@ namespace MagicalCrafters.BLL.Models.BLL
         public DateTime CreatedDate { get; set; }
         public string LastModifiedBy { get; set; }
         public DateTime LastModifiedDate { get; set; }
-        public int Points { get; set; }
+        public long Points { get; set; }
         public HousesBLL House { get; set; }
         public UsersBLL User { get; set; }
         public RolesBLL Role { get; set; }

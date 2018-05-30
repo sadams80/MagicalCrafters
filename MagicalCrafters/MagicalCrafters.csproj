@@ -158,6 +158,10 @@
     <Content Include="Scripts\jquery-1.10.2.min.map" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Users\PostUser.cshtml" />
+    <Content Include="Views\Users\Login.cshtml" />
+    <Content Include="Views\Users\GetUsers.cshtml" />
+    <Content Include="Views\Users\PatchUser.cshtml" />
+    <Content Include="Views\Users\DeleteUser.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

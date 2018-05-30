@@ -33,7 +33,7 @@ namespace MagicalCrafters.Controllers
         [HttpGet]
         public ActionResult Login(string username, string password)
         {
-            return View();
+            return RedirectToAction("Index", "Home", new { area = "" });
         }
 
         [HttpPost]
@@ -49,18 +49,18 @@ namespace MagicalCrafters.Controllers
         #endregion
 
         #region Get
-        public ActionResult GetUser()
+        public ActionResult GetUser(int userId)
         {
-            int userId = 1;
             ViewModels userVM = new ViewModels();
             userVM.SingleUser = _mappersDAL.Map(_userAccess.GetUser(userId));
-            //userVM.SingleUsers_Info = _mappersDAL.MapUserInfo(userVM.SingleUser.User_Info);
             return View(userVM);
         }
 
         public ActionResult GetUsers()
         {
-            return View();
+            ViewModels usersVM = new ViewModels();
+            usersVM.Users = _mappersDAL.Map(_userAccess.GetUsers());
+            return View(usersVM);
         }
         #endregion
 

@@ -23,7 +23,7 @@ namespace MagicalCrafters.Models
         [Display(Name = "Last Modified Date: ")]
         public DateTime LastModifiedDate { get; set; }
         [Display(Name = "Points: ")]
-        public int Points { get; set; }
+        public long Points { get; set; }
         public Houses House { get; set; }
         public Roles Role { get; set; }
 

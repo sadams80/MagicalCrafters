@@ -14,7 +14,7 @@ namespace MagicalCrafters.DAL.Models.DAL
         public DateTime CreatedDate { get; set; }
         public string LastModifiedBy { get; set; }
         public DateTime LastModifiedDate { get; set; }
-        public int Points { get; set; }
+        public long Points { get; set; }
         public HousesDAL House { get; set; }
         public RolesDAL Role { get; set; }
 

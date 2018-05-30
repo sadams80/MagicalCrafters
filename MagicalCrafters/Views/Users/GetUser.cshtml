@@ -49,4 +49,10 @@
         <td>@Html.LabelFor(m => m.SingleUser.User_Info.LastModifiedDate)</td>
         <td>@Html.DisplayFor(m => m.SingleUser.User_Info.LastModifiedDate)</td>
     </tr>
+    <tr>
+        <td>@Html.ActionLink("Edit", "PatchUser", "Users", routeValues: new { userId = Model.SingleUser.User_Id }, htmlAttributes: new { @class = "btn btn-sm btn-primary" })</td>
+    </tr>
+    <tr>
+        <td>@Html.ActionLink("Delete", "DeleteUser", "Users", routeValues: new { userId = Model.SingleUser.User_Id }, htmlAttributes: new { @class = "btn btn-sm btn-primary" })</td>
+    </tr>
 </table>
