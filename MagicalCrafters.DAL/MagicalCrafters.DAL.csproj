@@ -46,6 +46,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Users.xsd</DependentUpon>
     </Compile>
+    <Compile Include="HousesAccess.cs" />
     <Compile Include="Models.DAL\AnnouncementsDAL.cs" />
     <Compile Include="Models.DAL\CommentsDAL.cs" />
     <Compile Include="Models.DAL\Completed_ProjectsDAL.cs" />

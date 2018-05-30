@@ -13,12 +13,14 @@ namespace MagicalCrafters.DAL
 {
     public class UsersAccess
     {
+        #region Connections
         static string _connectionString = ConfigurationManager.ConnectionStrings["DBConnection"].ConnectionString;
         static string _errorLog = ConfigurationManager.ConnectionStrings["ErrorLog"].ConnectionString;
+        #endregion
 
+        #region GET
         public UsersDAL GetUser(int id)
         {
-            //UsersDAL user = new UsersDAL();
             DataTable user = new DataTable();
             UsersDAL userToGet = new UsersDAL();
             SqlConnection con = new SqlConnection(_connectionString);
@@ -56,10 +58,76 @@ namespace MagicalCrafters.DAL
             finally
             {
                 con.Close();
-
             }
-
             return userToGet;
         }
+
+        public UsersDAL GetUserByUserName (string username)
+        {
+            DataTable user = new DataTable();
+            UsersDAL userToGet = new UsersDAL();
+            SqlConnection con = new SqlConnection(_connectionString);
+            SqlCommand cmd = new SqlCommand("sp_GetUserByUserName", con);
+            cmd.CommandType = CommandType.StoredProcedure;
+
+            try
+            {
+                cmd.Parameters.AddWithValue("@UserName", username);
+                con.Open();
+                using (SqlDataAdapter adapter = new SqlDataAdapter(cmd))
+                {
+                    adapter.Fill(user);
+                }
+
+                userToGet.User_Id = Convert.ToInt32(user.Rows[0]["User_Id"]);
+                userToGet.UserName = user.Rows[0]["UserName"].ToString();
+                userToGet.Password = user.Rows[0]["Password"].ToString();
+                userToGet.Salt = user.Rows[0]["Salt"].ToString();
+            }
+            catch (Exception error)
+            {
+                using (StreamWriter writer = new StreamWriter(_errorLog))
+                {
+                    writer.Write("Create Exception: " + error);
+                }
+            }
+            finally
+            {
+                con.Close();
+            }
+            return userToGet;
+        }
+        #endregion
+
+        #region POST
+        public void PostUser (UsersDAL user)
+        {
+            SqlConnection con = new SqlConnection(_connectionString);
+            SqlCommand cmd = new SqlCommand("sp_CreateUser", con);
+            cmd.CommandType = CommandType.StoredProcedure;
+
+            try
+            {
+                cmd.Parameters.AddWithValue("@UserName", user.UserName);
+                cmd.Parameters.AddWithValue("@Password", user.Password);
+                cmd.Parameters.AddWithValue("@Salt", user.Salt);
+                cmd.Parameters.AddWithValue("@House_Id", user.User_Info.House_Id);
+                cmd.Parameters.AddWithValue("@Email", user.User_Info.Email);
+                con.Open();
+                cmd.ExecuteNonQuery();
+            }
+            catch (Exception error)
+            {
+                using (StreamWriter writer = new StreamWriter(_errorLog))
+                {
+                    writer.Write("Create Exception: " + error);
+                }
+            }
+            finally
+            {
+                con.Close();
+            }
+        }
+        #endregion
     }
 }

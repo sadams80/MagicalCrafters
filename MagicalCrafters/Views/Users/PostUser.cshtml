@@ -1,0 +1,75 @@
+﻿@model MagicalCrafters.Models.ViewModels
+@using MagicalCrafters.Models
+
+@{
+    ViewBag.Title = "Register";
+}
+
+<h2>Register User</h2>
+<br />
+<br />
+
+@using (Html.BeginForm("CreateUser", "Users", FormMethod.Post))
+{
+    <div>
+        <div>
+            @Html.LabelFor(m => m.SingleUser.UserName)
+        </div>
+        <div>
+            @Html.TextBoxFor(m => m.SingleUser.UserName)
+        </div>
+        <div>
+            @Html.LabelFor(m => m.SingleUser.User_Info.Email)
+        </div>
+        <div>
+            @Html.TextBoxFor(m => m.SingleUser.User_Info.Email)
+        </div>
+        <div>
+            @Html.LabelFor(m => m.SingleUser.User_Info.House_Id)
+        </div>
+        <div>
+            @{
+                List<SelectListItem> houseItems = new List<SelectListItem>();
+                houseItems.Add(new SelectListItem
+                {
+                    Text = "",
+                    Value = ""
+                });
+                houseItems.Add(new SelectListItem
+                {
+                    Text = "Gryffindor",
+                    Value = "1"
+                });
+                houseItems.Add(new SelectListItem
+                {
+                    Text = "Slytherin",
+                    Value = "2"
+                });
+                houseItems.Add(new SelectListItem
+                {
+                    Text = "Ravenclaw",
+                    Value = "3"
+                });
+                houseItems.Add(new SelectListItem
+                {
+                    Text = "HufflePuff",
+                    Value = "4"
+                });
+            }
+            @Html.DropDownListFor(m => m.SingleUser.User_Info.House_Id, houseItems)
+        </div>
+        <div>
+            @Html.LabelFor(m => m.SingleUser.Password)
+        </div>
+        <div>
+            @Html.PasswordFor(m => m.SingleUser.Password)
+        </div>
+        @Html.LabelFor(m => m.SingleUser.ConfirmPassword)
+        <div>
+            @Html.PasswordFor(m => m.SingleUser.ConfirmPassword)
+        </div>
+
+        <br />
+        <input type="submit" value="Register" />
+    </div>
+}

@@ -54,6 +54,7 @@
     <Compile Include="Models.BLL\SourcesBLL.cs" />
     <Compile Include="Models.BLL\UsersBLL.cs" />
     <Compile Include="Models.BLL\Users_InfoBLL.cs" />
+    <Compile Include="PasswordBLL.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup />
