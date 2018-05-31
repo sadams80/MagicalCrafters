@@ -17,38 +17,12 @@
     </tr>
     @foreach (Users user in Model.Users)
     {
-        <tr>
-            <td>@Html.DisplayFor(m => user.UserName)</td>
-            <td>@Html.DisplayFor(m => user.User_Info.Email)</td>
-            @if (user.User_Info.House_Id == 1)
-            {
-                <td>Gryffindor</td>
-            }
-            @if (user.User_Info.House_Id == 2)
-            {
-                <td>Slytherin</td>
-            }
-            @if (user.User_Info.House_Id == 3)
-            {
-                <td>Ravenclaw</td>
-            }
-            @if (user.User_Info.House_Id == 4)
-            {
-                <td>Hufflepuff</td>
-            }
-            @*@if (user.User_Info.Role_Id == 1)
-            {
-                <td>Regular</td>
-            }
-            @if (user.User_Info.Role_Id == 2)
-            {
-                <td>Power</td>
-            }
-            @if (user.User_Info.Role_Id == 3)
-            {
-                <td>Admin</td>
-            }*@
-            <td>@Html.ActionLink("View", "GetUser", "Users", routeValues: new { userId = user.User_Id }, htmlAttributes: new { @class = "btn btn-sm btn-primary" })</td>
-        </tr>
+    <tr>
+        <td>@Html.DisplayFor(m => user.UserName)</td>
+        <td>@Html.DisplayFor(m => user.User_Info.Email)</td>
+        <td>@Html.DisplayFor(m => user.User_Info.House.Name)</td>
+        @*<td>@Html.DisplayFor(m => user.User_Info.Role.Name)</td>*@
+        <td>@Html.ActionLink("View", "GetUser", "Users", routeValues: new { userId = user.User_Id }, htmlAttributes: new { @class = "btn btn-sm btn-primary" })</td>
+    </tr>
     }
 </table>

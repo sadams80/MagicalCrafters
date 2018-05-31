@@ -16,22 +16,7 @@
     </tr>
     <tr>
         <td>@Html.LabelFor(m => m.SingleUser.User_Info.House_Id)</td>
-        @if (Model.SingleUser.User_Info.House_Id == 1)
-        {
-            <td>Gryffindor</td>
-        }
-        @if (Model.SingleUser.User_Info.House_Id == 2)
-        {
-            <td>Slytherin</td>
-        }
-        @if (Model.SingleUser.User_Info.House_Id == 3)
-        {
-            <td>Ravenclaw</td>
-        }
-        @if (Model.SingleUser.User_Info.House_Id == 4)
-        {
-            <td>Hufflepuff</td>
-        }
+        <td>@Html.DisplayFor(m => m.SingleUser.User_Info.House.Name)</td>
     </tr>
     <tr>
         <td>@Html.LabelFor(m => m.SingleUser.User_Info.Points)</td>

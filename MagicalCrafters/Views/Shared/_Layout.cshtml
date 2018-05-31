@@ -18,13 +18,23 @@
                     <span class="icon-bar"></span>
                 </button>
                 @Html.ActionLink("Magical Crafters", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
-                @Html.ActionLink("Account", "GetUser", "Users", new { area = "" }, new { @class = "navbar-brand" })
-                @Html.ActionLink("Register", "PostUser", "Users", new { area = "" }, new { @class = "navbar-brand" })
-                @Html.ActionLink("View Users", "GetUsers", "Users", new { area = "" }, new { @class = "navbar-brand" })
+                @if (Session["User_Id"] != null)
+                {
+                    @Html.ActionLink("Account", "GetUser", "Users", new { area = "" }, new { @class = "navbar-brand" })
+                    if ((int)Session["Role_Id"] == 3)
+                    {
+                        @Html.ActionLink("View Users", "GetUsers", "Users", new { area = "" }, new { @class = "navbar-brand" })
+                    }
+                    @Html.ActionLink("Logout", "Logout", "Users", new { area = "" }, new { @class = "navbar-brand" })
+                }
+                else
+                {
+                    @Html.ActionLink("Register", "PostUser", "Users", new { area = "" }, new { @class = "navbar-brand" })
+                    @Html.ActionLink("Login", "Login", "Users", new { area = "" }, new { @class = "navbar-brand" })
+                }
             </div>
             <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                </ul>
+                <ul class="nav navbar-nav"></ul>
             </div>
         </div>
     </div>

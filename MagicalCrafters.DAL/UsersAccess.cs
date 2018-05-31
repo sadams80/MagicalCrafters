@@ -33,17 +33,18 @@ namespace MagicalCrafters.DAL
                     adapter.Fill(user);
                 }
 
-                userToGet.User_Id = Convert.ToInt32(user.Rows[0]["User_Id"]);
+                userToGet.User_Id = (int)user.Rows[0]["User_Id"];
                 userToGet.UserName = user.Rows[0]["UserName"].ToString();
-                userToGet.User_Info.Role_Id = Convert.ToInt32(user.Rows[0]["Role_Id"]);
-                userToGet.User_Info.Source_Id = Convert.ToInt32(user.Rows[0]["Source_Id"]);
-                userToGet.User_Info.House_Id = Convert.ToInt32(user.Rows[0]["House_Id"]);
+                userToGet.User_Info.Role_Id = (int)user.Rows[0]["Role_Id"];
+                userToGet.User_Info.Source_Id = (int)user.Rows[0]["Source_Id"];
+                userToGet.User_Info.House_Id = (int)user.Rows[0]["House_Id"];
                 userToGet.User_Info.Email = user.Rows[0]["Email"].ToString();
-                userToGet.User_Info.isFlagged = Convert.ToBoolean(user.Rows[0]["isFlagged"]);
-                userToGet.User_Info.CreatedDate = Convert.ToDateTime(user.Rows[0]["CreatedDate"]);
+                userToGet.User_Info.isFlagged = (bool)user.Rows[0]["isFlagged"];
+                userToGet.User_Info.CreatedDate = (DateTime)user.Rows[0]["CreatedDate"];
                 userToGet.User_Info.LastModifiedBy = user.Rows[0]["LastModifiedBy"].ToString();
-                userToGet.User_Info.LastModifiedDate = Convert.ToDateTime(user.Rows[0]["LastModifiedDate"]);
+                userToGet.User_Info.LastModifiedDate = (DateTime)user.Rows[0]["LastModifiedDate"];
                 userToGet.User_Info.Points = (long)user.Rows[0]["Points"];
+                userToGet.User_Info.House.Name = user.Rows[0]["Name"].ToString();
             }
             catch (Exception error)
             {
@@ -178,11 +179,12 @@ namespace MagicalCrafters.DAL
             userDAL.User_Info.Role_Id = (int)tableRow["Role_Id"];
             userDAL.User_Info.House_Id = (int)tableRow["House_Id"];
             userDAL.User_Info.Email = tableRow["Email"].ToString();
-            userDAL.User_Info.isFlagged = Convert.ToBoolean(tableRow["isFlagged"]);
-            userDAL.User_Info.CreatedDate = Convert.ToDateTime(tableRow["CreatedDate"]);
+            userDAL.User_Info.isFlagged = (bool)tableRow["isFlagged"];
+            userDAL.User_Info.CreatedDate = (DateTime)tableRow["CreatedDate"];
             userDAL.User_Info.LastModifiedBy = tableRow["LastModifiedBy"].ToString();
-            userDAL.User_Info.LastModifiedDate = Convert.ToDateTime(tableRow["LastModifiedDate"]);
+            userDAL.User_Info.LastModifiedDate = (DateTime)tableRow["LastModifiedDate"];
             userDAL.User_Info.Points = (long)tableRow["Points"];
+            userDAL.User_Info.House.Name = tableRow["Name"].ToString();
             return userDAL;
         }
         #endregion

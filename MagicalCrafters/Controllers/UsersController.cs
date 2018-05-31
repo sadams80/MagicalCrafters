@@ -33,34 +33,73 @@ namespace MagicalCrafters.Controllers
         [HttpGet]
         public ActionResult Login(string username, string password)
         {
-            return RedirectToAction("Index", "Home", new { area = "" });
+            if (Session["User_Id"] != null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            return View();
         }
 
         [HttpPost]
         public ActionResult Login(ViewModels userToLogin)
         {
-            return View();
+            if (ModelState.IsValid)
+            {
+                Users userDB = _mappersDAL.Map(_userAccess.GetUserByUserName(userToLogin.SingleUser.UserName));
+                if (userDB.UserName == userToLogin.SingleUser.UserName)
+                {
+                    userToLogin.SingleUser.Password = _passwordBLL.HashPassword(userToLogin.SingleUser.Password, userToLogin.SingleUser.Salt);
+                    bool isValid = _passwordBLL.ValidatePassword(userDB.Password, userToLogin.SingleUser.Password);
+
+                    if (isValid)
+                    {
+                        Users user = _mappersDAL.Map(_userAccess.GetUser(userDB.User_Id));
+                        Session["User_Id"] = user.User_Id;
+                        Session["UserName"] = user.UserName;
+                        Session["Role_Id"] = user.User_Info.Role_Id;
+                        Session["House_Id"] = user.User_Info.House_Id;
+
+                        return RedirectToAction("Index", "Home");
+                    }
+                    return View(userToLogin);
+                }
+                return View(userToLogin);
+            }
+            return View(userToLogin);
         }
 
         public ActionResult Logout()
         {
-            return View();
+            if (Session["User_Id"] != null)
+            {
+                Session.Clear();
+                return RedirectToAction("Index", "Home");
+            }
+            return RedirectToAction("Login");
         }
         #endregion
 
         #region Get
         public ActionResult GetUser(int userId)
         {
-            ViewModels userVM = new ViewModels();
-            userVM.SingleUser = _mappersDAL.Map(_userAccess.GetUser(userId));
-            return View(userVM);
+            if (Session["User_Id"] != null && (int)Session["User_Id"] == userId || (int)Session["Role_Id"] == 3)
+            {
+                ViewModels userVM = new ViewModels();
+                userVM.SingleUser = _mappersDAL.Map(_userAccess.GetUser(userId));
+                return View(userVM);
+            }
+            return RedirectToAction("Index", "Home");
         }
 
         public ActionResult GetUsers()
         {
-            ViewModels usersVM = new ViewModels();
-            usersVM.Users = _mappersDAL.Map(_userAccess.GetUsers());
-            return View(usersVM);
+            if (Session["User_Id"] != null && (int)Session["Role_Id"] == 3)
+            {
+                ViewModels usersVM = new ViewModels();
+                usersVM.Users = _mappersDAL.Map(_userAccess.GetUsers());
+                return View(usersVM);
+            }
+            return RedirectToAction("Index", "Home");
         }
         #endregion
 
@@ -68,7 +107,11 @@ namespace MagicalCrafters.Controllers
         [HttpGet]
         public ActionResult PostUser()
         {
-            return View();
+            if (Session["User_Id"] == null)
+            {
+                return View();
+            }
+            return RedirectToAction("Index", "Home");
         }
 
         [HttpPost]
@@ -117,9 +160,13 @@ namespace MagicalCrafters.Controllers
 
         #region Patch
         [HttpGet]
-        public ActionResult PatchUser(int UserId)
+        public ActionResult PatchUser(int userId)
         {
-            return View();
+            if (Session["User_Id"] != null && (int)Session["User_Id"] == userId || (int)Session["Role_Id"] == 3)
+            {
+                return View();
+            }
+            return RedirectToAction("Index", "Home");
         }
 
         [HttpPost]
@@ -133,7 +180,11 @@ namespace MagicalCrafters.Controllers
         [HttpGet]
         public ActionResult DeleteUser(int userId)
         {
-            return View();
+            if (Session["User_Id"] != null && (int)Session["User_Id"] == userId || (int)Session["Role_Id"] == 3)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            return RedirectToAction("Index", "Home");
         }
         #endregion
     }

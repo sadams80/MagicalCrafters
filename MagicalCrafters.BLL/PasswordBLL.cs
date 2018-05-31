@@ -5,6 +5,7 @@ namespace MagicalCrafters.BLL
 {
     public class PasswordBLL
     {
+        #region Hash
         public string HashPassword(string passwordToHash, string salt)
         {
             MD5 md5 = MD5.Create();
@@ -17,6 +18,9 @@ namespace MagicalCrafters.BLL
             }
             return newPassword.ToString();
         }
+        #endregion
+
+        #region Salt
         public string CreateSalt()
         {
             char[] characters = new char[62];
@@ -35,5 +39,22 @@ namespace MagicalCrafters.BLL
             }
             return salt.ToString();
         }
+        #endregion
+
+        #region Validate
+        public bool ValidatePassword (string passwordDB, string passwordToValidate)
+        {
+            bool isValid;
+            if (passwordDB == passwordToValidate)
+            {
+                isValid = true;
+            }
+            else
+            {
+                isValid = false;
+            }
+            return isValid;
+        }
+        #endregion
     }
 }

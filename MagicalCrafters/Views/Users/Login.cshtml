@@ -1,7 +1,23 @@
-﻿
+﻿@model MagicalCrafters.Models.ViewModels
+@using MagicalCrafters.Models
 @{
     ViewBag.Title = "Login";
 }
 
 <h2>Login</h2>
 
+
+<table class="table" tableFormat>
+    <tr>
+        <td>@Html.LabelFor(m => m.SingleUser.UserName)</td>
+        <td>@Html.TextBoxFor(m => m.SingleUser.UserName)</td>
+    </tr>
+    <tr>
+        <td>@Html.LabelFor(m => m.SingleUser.Password)</td>
+        <td>@Html.PasswordFor(m => m.SingleUser.Password)</td>
+    </tr>
+    <tr>
+        <td></td>
+        <td><input type="submit" value="Login" /></td>
+    </tr>
+</table>

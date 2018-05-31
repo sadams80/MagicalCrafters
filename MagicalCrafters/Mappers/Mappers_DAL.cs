@@ -67,6 +67,7 @@ namespace MagicalCrafters.Mappers
             user.User_Info.LastModifiedBy = userDAL.User_Info.LastModifiedBy;
             user.User_Info.LastModifiedDate = userDAL.User_Info.LastModifiedDate;
             user.User_Info.Points = userDAL.User_Info.Points;
+            user.User_Info.House.Name = userDAL.User_Info.House.Name;
             return user;
         }
 
@@ -86,6 +87,7 @@ namespace MagicalCrafters.Mappers
             userDAL.User_Info.LastModifiedBy = user.User_Info.LastModifiedBy;
             userDAL.User_Info.LastModifiedDate = user.User_Info.LastModifiedDate;
             userDAL.User_Info.Points = user.User_Info.Points;
+            userDAL.User_Info.House.Name = user.User_Info.House.Name;
             return userDAL;
         }
 
