@@ -20,7 +20,7 @@
                 @Html.ActionLink("Magical Crafters", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
                 @if (Session["User_Id"] != null)
                 {
-                    @Html.ActionLink("Account", "GetUser", "Users", new { area = "" }, new { @class = "navbar-brand" })
+                    @Html.ActionLink("Account", "GetUser", "Users", routeValues: new { userId = (int)Session["user_Id"] }, htmlAttributes: new { @class = "navbar-brand" })
                     if ((int)Session["Role_Id"] == 3)
                     {
                         @Html.ActionLink("View Users", "GetUsers", "Users", new { area = "" }, new { @class = "navbar-brand" })

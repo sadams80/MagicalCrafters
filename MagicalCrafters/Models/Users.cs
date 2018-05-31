@@ -12,11 +12,11 @@ namespace MagicalCrafters.Models
         [Required(ErrorMessage = "Password is required")]
         [Display(Name = "Password: ")]
         public string Password { get; set; }
-        [NotMapped] // Does not effect with your database
-        [Required(ErrorMessage = "Confirm Password required")]
-        [Compare("Password", ErrorMessage = "Password doesn't match.")]
-        [Display(Name = "Confirm Password: ")]
-        public string ConfirmPassword { get; set; }
+        //[NotMapped] // Does not effect with your database
+        //[Required(ErrorMessage = "Confirm Password required")]
+        //[Compare("Password", ErrorMessage = "Password doesn't match.")]
+        //[Display(Name = "Confirm Password: ")]
+        //public string ConfirmPassword { get; set; }
         public string Salt { get; set; }
         [Display(Name = "Blocked")]
         public bool isBlocked { get; set; }

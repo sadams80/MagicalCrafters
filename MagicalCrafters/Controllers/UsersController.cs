@@ -58,6 +58,7 @@ namespace MagicalCrafters.Controllers
                         Session["UserName"] = user.UserName;
                         Session["Role_Id"] = user.User_Info.Role_Id;
                         Session["House_Id"] = user.User_Info.House_Id;
+                        Session["Points"] = user.User_Info.Points;
 
                         return RedirectToAction("Index", "Home");
                     }
@@ -119,41 +120,46 @@ namespace MagicalCrafters.Controllers
         {
             if (ModelState.IsValid)
             {
-                userToPost.SingleUser.Salt = _passwordBLL.CreateSalt();
-                userToPost.SingleUser.Password = _passwordBLL.HashPassword(userToPost.SingleUser.Password, userToPost.SingleUser.Salt);
-                _userAccess.PostUser(_mappersDAL.Map(userToPost.SingleUser));
-
-                Users newUser = _mappersDAL.Map(_userAccess.GetUserByUserName(userToPost.SingleUser.UserName));
-
-                if (newUser != null)
+                Users userDb = _mappersDAL.Map(_userAccess.GetUserByUserName(userToPost.SingleUser.UserName));
+                if (userToPost.SingleUser.UserName == userDb.UserName)
                 {
-                    _houseAccess.PostPoints(5, userToPost.SingleUser.User_Info.House_Id);
-                    if (userToPost.SingleUser.User_Info.House_Id == 1)
+                    userToPost.SingleUser.Salt = _passwordBLL.CreateSalt();
+                    userToPost.SingleUser.Password = _passwordBLL.HashPassword(userToPost.SingleUser.Password, userToPost.SingleUser.Salt);
+                    _userAccess.PostUser(_mappersDAL.Map(userToPost.SingleUser));
+
+                    Users newUser = _mappersDAL.Map(_userAccess.GetUserByUserName(userToPost.SingleUser.UserName));
+
+                    if (newUser != null)
                     {
-                        TempData["UserCreateSuccess"] = "5 points to GRYFFINDOR!";
+                        _houseAccess.PostPoints(5, userToPost.SingleUser.User_Info.House_Id);
+                        if (userToPost.SingleUser.User_Info.House_Id == 1)
+                        {
+                            TempData["UserCreateSuccess"] = "5 points to GRYFFINDOR!";
+                        }
+                        else if (userToPost.SingleUser.User_Info.House_Id == 2)
+                        {
+                            TempData["UserCreateSuccess"] = "5 points to SLYTHERIN!";
+                        }
+                        else if (userToPost.SingleUser.User_Info.House_Id == 3)
+                        {
+                            TempData["UserCreateSuccess"] = "5 points to RAVENCLAW!";
+                        }
+                        else if (userToPost.SingleUser.User_Info.House_Id == 4)
+                        {
+                            TempData["UserCreateSuccess"] = "5 points to HUFFLEPUFF!";
+                        }
+                        return RedirectToAction("Login", "Users", new { area = "" });
                     }
-                    else if (userToPost.SingleUser.User_Info.House_Id == 2)
+                    else
                     {
-                        TempData["UserCreateSuccess"] = "5 points to SLYTHERIN!";
+                        return View(userToPost); //creation error
                     }
-                    else if (userToPost.SingleUser.User_Info.House_Id == 3)
-                    {
-                        TempData["UserCreateSuccess"] = "5 points to RAVENCLAW!";
-                    }
-                    else if (userToPost.SingleUser.User_Info.House_Id == 4)
-                    {
-                        TempData["UserCreateSuccess"] = "5 points to HUFFLEPUFF!";
-                    }
-                    return RedirectToAction("Login", "Users", new { area = "" });
                 }
-                else
-                {
-                    return View(userToPost);
-                }
+                return View(userToPost); //username error
             }
             else
             {
-                return View(userToPost);
+                return View(userToPost); //error
             }
         }
         #endregion
@@ -164,7 +170,10 @@ namespace MagicalCrafters.Controllers
         {
             if (Session["User_Id"] != null && (int)Session["User_Id"] == userId || (int)Session["Role_Id"] == 3)
             {
-                return View();
+                ViewModels user = new ViewModels();
+                user.SingleUser = _mappersDAL.Map(_userAccess.GetUser(userId));
+                user.SingleUser.Password = "";
+                return View(user);
             }
             return RedirectToAction("Index", "Home");
         }
@@ -172,7 +181,34 @@ namespace MagicalCrafters.Controllers
         [HttpPost]
         public ActionResult PatchUser(ViewModels userToPatch)
         {
-            return View();
+            if (ModelState.IsValid)
+            {
+                Users userDb = _mappersDAL.Map(_userAccess.GetUserByUserName(userToPatch.SingleUser.UserName));
+                if (userToPatch.SingleUser.UserName == userDb.UserName)
+                {
+                    userToPatch.SingleUser.Salt = _passwordBLL.CreateSalt();
+                    userToPatch.SingleUser.Password = _passwordBLL.HashPassword(userToPatch.SingleUser.Password, userToPatch.SingleUser.Salt);
+
+                    _userAccess.PatchUser(_mappersDAL.Map(userToPatch.SingleUser));
+                    Users user = _mappersDAL.Map(_userAccess.GetUser(userToPatch.SingleUser.User_Id));
+                    if (userToPatch.SingleUser == user)
+                    {
+                        return View(user);
+                    }
+                    return View(); //error message
+                }
+                else
+                {
+                    _userAccess.PatchUser(_mappersDAL.Map(userToPatch.SingleUser));
+                    Users user = _mappersDAL.Map(_userAccess.GetUser(userToPatch.SingleUser.User_Id));
+                    if (userToPatch.SingleUser == user)
+                    {
+                        return View(user);
+                    }
+                    return View(); //error message
+                }
+            }
+            return View(userToPatch); //error message
         }
         #endregion
 

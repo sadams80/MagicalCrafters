@@ -77,7 +77,7 @@ namespace MagicalCrafters.DAL
                     adapter.Fill(user);
                 }
 
-                userToGet.User_Id = Convert.ToInt32(user.Rows[0]["User_Id"]);
+                userToGet.User_Id = (int)user.Rows[0]["User_Id"];
                 userToGet.UserName = user.Rows[0]["UserName"].ToString();
                 userToGet.Password = user.Rows[0]["Password"].ToString();
                 userToGet.Salt = user.Rows[0]["Salt"].ToString();
@@ -156,6 +156,68 @@ namespace MagicalCrafters.DAL
         }
         #endregion
 
+        #region PATCH
+        public void PatchUser(UsersDAL user)
+        {
+            SqlConnection con = new SqlConnection(_connectionString);
+            SqlCommand cmd = new SqlCommand("sp_UpdateUser", con);
+            cmd.CommandType = CommandType.StoredProcedure;
+
+            try
+            {
+                cmd.Parameters.AddWithValue("@User_Id", user.User_Id);
+                cmd.Parameters.AddWithValue("@UserName", user.UserName);
+                cmd.Parameters.AddWithValue("@Password", user.Password);
+                cmd.Parameters.AddWithValue("@Salt", user.Salt);
+                cmd.Parameters.AddWithValue("@House_Id", user.User_Info.House_Id);
+                cmd.Parameters.AddWithValue("@Email", user.User_Info.Email);
+                cmd.Parameters.AddWithValue("Points", user.User_Info.Points);
+                con.Open();
+                cmd.ExecuteNonQuery();
+            }
+            catch (Exception error)
+            {
+                using (StreamWriter writer = new StreamWriter(_errorLog))
+                {
+                    writer.Write("Create Exception: " + error);
+                }
+            }
+            finally
+            {
+                con.Close();
+            }
+        }
+        #endregion
+
+        #region DELETE
+        public void DeleteUser(int userId)
+        {
+            DataTable user = new DataTable();
+            UsersDAL userToGet = new UsersDAL();
+            SqlConnection con = new SqlConnection(_connectionString);
+            SqlCommand cmd = new SqlCommand("sp_DeleteUser", con);
+            cmd.CommandType = CommandType.StoredProcedure;
+
+            try
+            {
+                cmd.Parameters.AddWithValue("@UserName", userId);
+                con.Open();
+                cmd.ExecuteNonQuery();
+            }
+            catch (Exception error)
+            {
+                using (StreamWriter writer = new StreamWriter(_errorLog))
+                {
+                    writer.Write("Create Exception: " + error);
+                }
+            }
+            finally
+            {
+                con.Close();
+            }
+        }
+        #endregion
+
         #region Tables
         public List<UsersDAL> TableToListOfUsers(DataTable usersTable)
         {
@@ -171,7 +233,7 @@ namespace MagicalCrafters.DAL
             }
             return dUsers;
         }
-        public static UsersDAL RowToUsers(DataRow tableRow)
+        public UsersDAL RowToUsers(DataRow tableRow)
         {
             UsersDAL userDAL = new UsersDAL();
             userDAL.User_Id = (int)tableRow["User_Id"];

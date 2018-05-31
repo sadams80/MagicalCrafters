@@ -1,7 +1,43 @@
-﻿
+﻿@model MagicalCrafters.Models.ViewModels
+@using MagicalCrafters.Models
+
 @{
-    ViewBag.Title = "PatchUser";
+    ViewBag.Title = "Update User";
 }
 
-<h2>PatchUser</h2>
+<h2>Update User</h2>
+<br />
+<br />
 
+@using (Html.BeginForm("PatchUser", "Users", FormMethod.Post))
+{
+    <div>
+        <div>
+            @Html.LabelFor(m => m.SingleUser.UserName)
+        </div>
+        <div>
+            @Html.TextBoxFor(m => m.SingleUser.UserName)
+        </div>
+        <div>
+            @Html.LabelFor(m => m.SingleUser.User_Info.Email)
+        </div>
+        <div>
+            @Html.TextBoxFor(m => m.SingleUser.User_Info.Email)
+        </div>
+        <div>
+            @Html.LabelFor(m => m.SingleUser.Password)
+        </div>
+        <div>
+            @Html.PasswordFor(m => m.SingleUser.Password)
+        </div>
+        @*<div>
+                @Html.LabelFor(m => m.SingleUser.ConfirmPassword)
+            </div>
+            <div>
+                @Html.PasswordFor(m => m.SingleUser.ConfirmPassword)
+            </div>*@
+
+        <br />
+        <input type="submit" value="Register" />
+    </div>
+}
