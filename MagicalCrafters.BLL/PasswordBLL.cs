@@ -9,7 +9,7 @@ namespace MagicalCrafters.BLL
         public string HashPassword(string passwordToHash, string salt)
         {
             MD5 md5 = MD5.Create();
-            byte[] inputBytes = Encoding.ASCII.GetBytes(passwordToHash);
+            byte[] inputBytes = Encoding.ASCII.GetBytes(passwordToHash + salt);
             byte[] hashedBytes = md5.ComputeHash(inputBytes);
             StringBuilder newPassword = new StringBuilder();
             for (int i = 0; i < hashedBytes.Length; i++)

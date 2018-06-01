@@ -11,6 +11,7 @@
 
 @using (Html.BeginForm("PatchUser", "Users", FormMethod.Post))
 {
+    @Html.HiddenFor(m => m.SingleUser.User_Id)
     <div>
         <div>
             @Html.LabelFor(m => m.SingleUser.UserName)
@@ -24,12 +25,12 @@
         <div>
             @Html.TextBoxFor(m => m.SingleUser.User_Info.Email)
         </div>
-        <div>
+        @*<div>
             @Html.LabelFor(m => m.SingleUser.Password)
         </div>
         <div>
             @Html.PasswordFor(m => m.SingleUser.Password)
-        </div>
+        </div>*@
         @*<div>
                 @Html.LabelFor(m => m.SingleUser.ConfirmPassword)
             </div>
@@ -38,6 +39,6 @@
             </div>*@
 
         <br />
-        <input type="submit" value="Register" />
+        <input type="submit" value="Update" />
     </div>
 }

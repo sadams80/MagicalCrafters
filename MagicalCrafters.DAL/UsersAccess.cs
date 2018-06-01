@@ -35,6 +35,8 @@ namespace MagicalCrafters.DAL
 
                 userToGet.User_Id = (int)user.Rows[0]["User_Id"];
                 userToGet.UserName = user.Rows[0]["UserName"].ToString();
+                //userToGet.Password = user.Rows[0]["Password"].ToString();
+                //userToGet.Salt = user.Rows[0]["Salt"].ToString();
                 userToGet.User_Info.Role_Id = (int)user.Rows[0]["Role_Id"];
                 userToGet.User_Info.Source_Id = (int)user.Rows[0]["Source_Id"];
                 userToGet.User_Info.House_Id = (int)user.Rows[0]["House_Id"];
@@ -167,11 +169,13 @@ namespace MagicalCrafters.DAL
             {
                 cmd.Parameters.AddWithValue("@User_Id", user.User_Id);
                 cmd.Parameters.AddWithValue("@UserName", user.UserName);
-                cmd.Parameters.AddWithValue("@Password", user.Password);
-                cmd.Parameters.AddWithValue("@Salt", user.Salt);
-                cmd.Parameters.AddWithValue("@House_Id", user.User_Info.House_Id);
+                //cmd.Parameters.AddWithValue("@Salt", user.Salt);
+                //cmd.Parameters.AddWithValue("@Password", user.Password);
+                cmd.Parameters.AddWithValue("@Role_Id", user.User_Info.Role_Id);
                 cmd.Parameters.AddWithValue("@Email", user.User_Info.Email);
-                cmd.Parameters.AddWithValue("Points", user.User_Info.Points);
+                cmd.Parameters.AddWithValue("@isFlagged", user.User_Info.isFlagged);
+                cmd.Parameters.AddWithValue("@LastModifiedBy", user.User_Info.LastModifiedBy);
+                cmd.Parameters.AddWithValue("@LastModifiedDate", user.User_Info.LastModifiedDate);
                 con.Open();
                 cmd.ExecuteNonQuery();
             }
@@ -193,14 +197,13 @@ namespace MagicalCrafters.DAL
         public void DeleteUser(int userId)
         {
             DataTable user = new DataTable();
-            UsersDAL userToGet = new UsersDAL();
             SqlConnection con = new SqlConnection(_connectionString);
             SqlCommand cmd = new SqlCommand("sp_DeleteUser", con);
             cmd.CommandType = CommandType.StoredProcedure;
 
             try
             {
-                cmd.Parameters.AddWithValue("@UserName", userId);
+                cmd.Parameters.AddWithValue("@User_Id", userId);
                 con.Open();
                 cmd.ExecuteNonQuery();
             }

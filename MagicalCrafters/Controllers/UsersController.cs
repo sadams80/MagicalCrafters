@@ -48,7 +48,7 @@ namespace MagicalCrafters.Controllers
                 Users userDB = _mappersDAL.Map(_userAccess.GetUserByUserName(userToLogin.SingleUser.UserName));
                 if (userDB.UserName == userToLogin.SingleUser.UserName)
                 {
-                    userToLogin.SingleUser.Password = _passwordBLL.HashPassword(userToLogin.SingleUser.Password, userToLogin.SingleUser.Salt);
+                    userToLogin.SingleUser.Password = _passwordBLL.HashPassword(userToLogin.SingleUser.Password, userDB.Salt);
                     bool isValid = _passwordBLL.ValidatePassword(userDB.Password, userToLogin.SingleUser.Password);
 
                     if (isValid)
@@ -121,7 +121,7 @@ namespace MagicalCrafters.Controllers
             if (ModelState.IsValid)
             {
                 Users userDb = _mappersDAL.Map(_userAccess.GetUserByUserName(userToPost.SingleUser.UserName));
-                if (userToPost.SingleUser.UserName == userDb.UserName)
+                if (userDb.UserName == null)
                 {
                     userToPost.SingleUser.Salt = _passwordBLL.CreateSalt();
                     userToPost.SingleUser.Password = _passwordBLL.HashPassword(userToPost.SingleUser.Password, userToPost.SingleUser.Salt);
@@ -172,7 +172,6 @@ namespace MagicalCrafters.Controllers
             {
                 ViewModels user = new ViewModels();
                 user.SingleUser = _mappersDAL.Map(_userAccess.GetUser(userId));
-                user.SingleUser.Password = "";
                 return View(user);
             }
             return RedirectToAction("Index", "Home");
@@ -183,30 +182,30 @@ namespace MagicalCrafters.Controllers
         {
             if (ModelState.IsValid)
             {
-                Users userDb = _mappersDAL.Map(_userAccess.GetUserByUserName(userToPatch.SingleUser.UserName));
-                if (userToPatch.SingleUser.UserName == userDb.UserName)
+                Users userDb = _mappersDAL.Map(_userAccess.GetUser(userToPatch.SingleUser.User_Id));
+                if (userToPatch.SingleUser.User_Id == userDb.User_Id || (int)Session["Role_Id"] == 3)
                 {
-                    userToPatch.SingleUser.Salt = _passwordBLL.CreateSalt();
-                    userToPatch.SingleUser.Password = _passwordBLL.HashPassword(userToPatch.SingleUser.Password, userToPatch.SingleUser.Salt);
+                    userToPatch.SingleUser.UserName = userToPatch.SingleUser.UserName ?? userDb.UserName;
+                    //userToPatch.SingleUser.Salt = (userToPatch.SingleUser.Salt != userDb.Salt) ? _passwordBLL.CreateSalt() : userDb.Salt;
+                    //userToPatch.SingleUser.Password = (userToPatch.SingleUser.Password != userDb.Password) ? _passwordBLL.HashPassword(userToPatch.SingleUser.Password, userToPatch.SingleUser.Salt) : userDb.Password;
+                    //userToPatch.SingleUser.isBlocked = userToPatch.SingleUser.isBlocked ?? userDb.isBlocked;
+                    userToPatch.SingleUser.User_Info.Role_Id = userToPatch.SingleUser.User_Info.Role_Id ?? userDb.User_Info.Role_Id;
+                    userToPatch.SingleUser.User_Info.Email = userToPatch.SingleUser.User_Info.Email ?? userDb.User_Info.Email;
+                    userToPatch.SingleUser.User_Info.isFlagged = userToPatch.SingleUser.User_Info.isFlagged ?? userDb.User_Info.isFlagged;
+                    userToPatch.SingleUser.User_Info.LastModifiedBy = Session["UserName"].ToString();
+                    userToPatch.SingleUser.User_Info.LastModifiedDate = DateTime.Now;
+                    userToPatch.SingleUser.isDeleted = userToPatch.SingleUser.isDeleted ?? userDb.isDeleted;
 
                     _userAccess.PatchUser(_mappersDAL.Map(userToPatch.SingleUser));
-                    Users user = _mappersDAL.Map(_userAccess.GetUser(userToPatch.SingleUser.User_Id));
-                    if (userToPatch.SingleUser == user)
+                    ViewModels user = new ViewModels();
+                    user.SingleUser = _mappersDAL.Map(_userAccess.GetUser(userToPatch.SingleUser.User_Id));
+                    if (userToPatch.SingleUser.UserName == user.SingleUser.UserName && userToPatch.SingleUser.User_Info.Email == user.SingleUser.User_Info.Email)
                     {
-                        return View(user);
+                        return RedirectToAction("GetUser", new { userId = user.SingleUser.User_Id });
                     }
                     return View(); //error message
                 }
-                else
-                {
-                    _userAccess.PatchUser(_mappersDAL.Map(userToPatch.SingleUser));
-                    Users user = _mappersDAL.Map(_userAccess.GetUser(userToPatch.SingleUser.User_Id));
-                    if (userToPatch.SingleUser == user)
-                    {
-                        return View(user);
-                    }
-                    return View(); //error message
-                }
+                return View(); //error message
             }
             return View(userToPatch); //error message
         }
@@ -218,7 +217,14 @@ namespace MagicalCrafters.Controllers
         {
             if (Session["User_Id"] != null && (int)Session["User_Id"] == userId || (int)Session["Role_Id"] == 3)
             {
-                return RedirectToAction("Index", "Home");
+                _userAccess.DeleteUser(userId);
+                Users userDb = _mappersDAL.Map(_userAccess.GetUser(userId));
+                if (userDb.UserName == null)
+                {
+                    Session.Clear();
+                    return RedirectToAction("Index", "Home");
+                }
+                return View("GetUser", new { userId = userId }); //error message
             }
             return RedirectToAction("Index", "Home");
         }
