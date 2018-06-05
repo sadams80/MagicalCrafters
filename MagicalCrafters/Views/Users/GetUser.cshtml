@@ -4,40 +4,53 @@
     ViewBag.Title = "Account";
 }
 
-<h2>View User</h2>
+@if (Model.SingleUser.UserName != null)
+{
+    <h2>View User</h2>
 
-<table class="table" tableFormat>
-    <tr>
-        <th colspan="2" align="center">Account For: @Html.DisplayFor(m => m.SingleUser.UserName)</th>
-    </tr>
-    <tr>
-        <td>@Html.LabelFor(m => m.SingleUser.User_Info.Email)</td>
-        <td>@Html.DisplayFor(m => m.SingleUser.User_Info.Email)</td>
-    </tr>
-    <tr>
-        <td>@Html.LabelFor(m => m.SingleUser.User_Info.House_Id)</td>
-        <td>@Html.DisplayFor(m => m.SingleUser.User_Info.House.Name)</td>
-    </tr>
-    <tr>
-        <td>@Html.LabelFor(m => m.SingleUser.User_Info.Points)</td>
-        <td>@Html.DisplayFor(m => m.SingleUser.User_Info.Points)</td>
-    </tr>
-    <tr>
-        <td>@Html.LabelFor(m => m.SingleUser.User_Info.CreatedDate)</td>
-        <td>@Html.DisplayFor(m => m.SingleUser.User_Info.CreatedDate)</td>
-    </tr>
-    <tr>
-        <td>@Html.LabelFor(m => m.SingleUser.User_Info.LastModifiedBy)</td>
-        <td>@Html.DisplayFor(m => m.SingleUser.User_Info.LastModifiedBy)</td>
-    </tr>
-    <tr>
-        <td>@Html.LabelFor(m => m.SingleUser.User_Info.LastModifiedDate)</td>
-        <td>@Html.DisplayFor(m => m.SingleUser.User_Info.LastModifiedDate)</td>
-    </tr>
-    <tr>
-        <td>@Html.ActionLink("Edit", "PatchUser", "Users", routeValues: new { userId = Model.SingleUser.User_Id }, htmlAttributes: new { @class = "btn btn-sm btn-primary" })</td>
-    </tr>
-    <tr>
-        <td>@Html.ActionLink("Delete", "DeleteUser", "Users", routeValues: new { userId = Model.SingleUser.User_Id }, htmlAttributes: new { @class = "btn btn-sm btn-primary" })</td>
-    </tr>
-</table>
+    <table class="table" tableFormat>
+        <tr>
+            <th colspan="2" align="center">Account For: @Html.DisplayFor(m => m.SingleUser.UserName)</th>
+        </tr>
+        <tr>
+            <td>@Html.LabelFor(m => m.SingleUser.User_Info.Email)</td>
+            <td>@Html.DisplayFor(m => m.SingleUser.User_Info.Email)</td>
+        </tr>
+        <tr>
+            <td>@Html.LabelFor(m => m.SingleUser.User_Info.House_Id)</td>
+            <td>@Html.DisplayFor(m => m.SingleUser.User_Info.House.Name)</td>
+        </tr>
+        <tr>
+            <td>@Html.LabelFor(m => m.SingleUser.User_Info.Points)</td>
+            <td>@Html.DisplayFor(m => m.SingleUser.User_Info.Points)</td>
+        </tr>
+        <tr>
+            <td>@Html.LabelFor(m => m.SingleUser.User_Info.CreatedDate)</td>
+            <td>@Html.DisplayFor(m => m.SingleUser.User_Info.CreatedDate)</td>
+        </tr>
+        <tr>
+            <td>@Html.LabelFor(m => m.SingleUser.User_Info.LastModifiedBy)</td>
+            <td>@Html.DisplayFor(m => m.SingleUser.User_Info.LastModifiedBy)</td>
+        </tr>
+        <tr>
+            <td>@Html.LabelFor(m => m.SingleUser.User_Info.LastModifiedDate)</td>
+            <td>@Html.DisplayFor(m => m.SingleUser.User_Info.LastModifiedDate)</td>
+        </tr>
+        <tr>
+            <td>@Html.ActionLink("Edit", "PatchUser", "Users", routeValues: new { userId = Model.SingleUser.User_Id }, htmlAttributes: new { @class = "btn btn-sm btn-primary" })</td>
+        </tr>
+        <tr>
+            <td>@Html.ActionLink("Delete", "DeleteUser", "Users", routeValues: new { userId = Model.SingleUser.User_Id }, htmlAttributes: new { @class = "btn btn-sm btn-primary" })</td>
+        </tr>
+        @if ((int)Session["Role_Id"] == 3)
+        {
+            <tr>
+                <td>@Html.ActionLink("Block", "BlockUser", "Users", routeValues: new { userId = Model.SingleUser.User_Id }, htmlAttributes: new { @class = "btn btn-sm btn-primary" })</td>
+            </tr>
+        }
+    </table>
+}
+else
+{
+    <h3>User not found</h3>
+}

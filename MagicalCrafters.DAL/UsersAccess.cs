@@ -41,7 +41,6 @@ namespace MagicalCrafters.DAL
                 userToGet.User_Info.Source_Id = (int)user.Rows[0]["Source_Id"];
                 userToGet.User_Info.House_Id = (int)user.Rows[0]["House_Id"];
                 userToGet.User_Info.Email = user.Rows[0]["Email"].ToString();
-                userToGet.User_Info.isFlagged = (bool)user.Rows[0]["isFlagged"];
                 userToGet.User_Info.CreatedDate = (DateTime)user.Rows[0]["CreatedDate"];
                 userToGet.User_Info.LastModifiedBy = user.Rows[0]["LastModifiedBy"].ToString();
                 userToGet.User_Info.LastModifiedDate = (DateTime)user.Rows[0]["LastModifiedDate"];
@@ -52,7 +51,7 @@ namespace MagicalCrafters.DAL
             {
                 using (StreamWriter writer = new StreamWriter(_errorLog))
                 {
-                    writer.Write("Create Exception: " + error);
+                    writer.WriteLine(DateTime.Now + " Get UserbyId Exception: " + error + "/r/n");
                 }
             }
             finally
@@ -88,7 +87,7 @@ namespace MagicalCrafters.DAL
             {
                 using (StreamWriter writer = new StreamWriter(_errorLog))
                 {
-                    writer.Write("Create Exception: " + error);
+                    writer.WriteLine(DateTime.Now + " Get User By Username Exception: " + error + "/r/n");
                 }
             }
             finally
@@ -102,7 +101,7 @@ namespace MagicalCrafters.DAL
         {
             DataTable usersTable = new DataTable();
             SqlConnection connection = new SqlConnection(_connectionString);
-            SqlCommand cmd = new SqlCommand("sp_ViewUsers", connection);
+            SqlCommand cmd = new SqlCommand("sp_GetUsers", connection);
             cmd.CommandType = CommandType.StoredProcedure;
             try
             {
@@ -116,7 +115,7 @@ namespace MagicalCrafters.DAL
             {
                 using (StreamWriter writer = new StreamWriter(_errorLog))
                 {
-                    writer.Write("View Exception: " + error);
+                    writer.WriteLine(DateTime.Now + " View Users Exception: " + error + "/r/n");
                 }
             }
             finally
@@ -131,7 +130,7 @@ namespace MagicalCrafters.DAL
         public void PostUser(UsersDAL user)
         {
             SqlConnection con = new SqlConnection(_connectionString);
-            SqlCommand cmd = new SqlCommand("sp_CreateUser", con);
+            SqlCommand cmd = new SqlCommand("sp_PostUser", con);
             cmd.CommandType = CommandType.StoredProcedure;
 
             try
@@ -148,7 +147,7 @@ namespace MagicalCrafters.DAL
             {
                 using (StreamWriter writer = new StreamWriter(_errorLog))
                 {
-                    writer.Write("Create Exception: " + error);
+                    writer.WriteLine(DateTime.Now + " Post User Exception: " + error + "/r/n");
                 }
             }
             finally
@@ -162,18 +161,15 @@ namespace MagicalCrafters.DAL
         public void PatchUser(UsersDAL user)
         {
             SqlConnection con = new SqlConnection(_connectionString);
-            SqlCommand cmd = new SqlCommand("sp_UpdateUser", con);
+            SqlCommand cmd = new SqlCommand("sp_PatchUser", con);
             cmd.CommandType = CommandType.StoredProcedure;
 
             try
             {
                 cmd.Parameters.AddWithValue("@User_Id", user.User_Id);
                 cmd.Parameters.AddWithValue("@UserName", user.UserName);
-                //cmd.Parameters.AddWithValue("@Salt", user.Salt);
-                //cmd.Parameters.AddWithValue("@Password", user.Password);
                 cmd.Parameters.AddWithValue("@Role_Id", user.User_Info.Role_Id);
                 cmd.Parameters.AddWithValue("@Email", user.User_Info.Email);
-                cmd.Parameters.AddWithValue("@isFlagged", user.User_Info.isFlagged);
                 cmd.Parameters.AddWithValue("@LastModifiedBy", user.User_Info.LastModifiedBy);
                 cmd.Parameters.AddWithValue("@LastModifiedDate", user.User_Info.LastModifiedDate);
                 con.Open();
@@ -183,7 +179,7 @@ namespace MagicalCrafters.DAL
             {
                 using (StreamWriter writer = new StreamWriter(_errorLog))
                 {
-                    writer.Write("Create Exception: " + error);
+                    writer.WriteLine(DateTime.Now + " Patch User Exception: " + error + "/r/n");
                 }
             }
             finally
@@ -193,8 +189,8 @@ namespace MagicalCrafters.DAL
         }
         #endregion
 
-        #region DELETE
-        public void DeleteUser(int userId)
+        #region DELETE / BLOCK
+        public void DeleteUser(int userId, int deletingUserId)
         {
             DataTable user = new DataTable();
             SqlConnection con = new SqlConnection(_connectionString);
@@ -204,6 +200,7 @@ namespace MagicalCrafters.DAL
             try
             {
                 cmd.Parameters.AddWithValue("@User_Id", userId);
+                cmd.Parameters.AddWithValue("@DeletingUser_Id", deletingUserId);
                 con.Open();
                 cmd.ExecuteNonQuery();
             }
@@ -211,7 +208,34 @@ namespace MagicalCrafters.DAL
             {
                 using (StreamWriter writer = new StreamWriter(_errorLog))
                 {
-                    writer.Write("Create Exception: " + error);
+                    writer.WriteLine(DateTime.Now + " Delete User Exception: " + error + "/r/n");
+                }
+            }
+            finally
+            {
+                con.Close();
+            }
+        }
+
+        public void BlockUser(int userId, int adminId)
+        {
+            DataTable user = new DataTable();
+            SqlConnection con = new SqlConnection(_connectionString);
+            SqlCommand cmd = new SqlCommand("sp_BlockUser", con);
+            cmd.CommandType = CommandType.StoredProcedure;
+
+            try
+            {
+                cmd.Parameters.AddWithValue("@User_Id", userId);
+                cmd.Parameters.AddWithValue("@Admin_Id", adminId);
+                con.Open();
+                cmd.ExecuteNonQuery();
+            }
+            catch (Exception error)
+            {
+                using (StreamWriter writer = new StreamWriter(_errorLog))
+                {
+                    writer.WriteLine(DateTime.Now + " Block User Exception: " + error + "/r/n");
                 }
             }
             finally
@@ -244,7 +268,6 @@ namespace MagicalCrafters.DAL
             userDAL.User_Info.Role_Id = (int)tableRow["Role_Id"];
             userDAL.User_Info.House_Id = (int)tableRow["House_Id"];
             userDAL.User_Info.Email = tableRow["Email"].ToString();
-            userDAL.User_Info.isFlagged = (bool)tableRow["isFlagged"];
             userDAL.User_Info.CreatedDate = (DateTime)tableRow["CreatedDate"];
             userDAL.User_Info.LastModifiedBy = tableRow["LastModifiedBy"].ToString();
             userDAL.User_Info.LastModifiedDate = (DateTime)tableRow["LastModifiedDate"];

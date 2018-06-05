@@ -1,4 +1,4 @@
-Create Exception: System.IndexOutOfRangeException: There is no row at position 0.
+6/5/2018 1:45:14 PM Get User By Username Exception: System.IndexOutOfRangeException: There is no row at position 0.
    at System.Data.RBTree`1.GetNodeByIndex(Int32 userIndex)
    at System.Data.DataRowCollection.get_Item(Int32 index)
-   at MagicalCrafters.DAL.UsersAccess.GetUserByUserName(String username)
+   at MagicalCrafters.DAL.UsersAccess.GetUserByUserName(String username)/r/n

@@ -25,19 +25,21 @@
         <div>
             @Html.TextBoxFor(m => m.SingleUser.User_Info.Email)
         </div>
-        @*<div>
-            @Html.LabelFor(m => m.SingleUser.Password)
-        </div>
-        <div>
-            @Html.PasswordFor(m => m.SingleUser.Password)
-        </div>*@
-        @*<div>
-                @Html.LabelFor(m => m.SingleUser.ConfirmPassword)
+        @if ((int)Session["Role_Id"] == 3)
+        {
+            <div>
+                @Html.LabelFor(m => m.SingleUser.User_Info.Role_Id)
             </div>
             <div>
-                @Html.PasswordFor(m => m.SingleUser.ConfirmPassword)
-            </div>*@
-
+                @Html.TextBoxFor(m => m.SingleUser.User_Info.Role_Id)
+            </div>
+            <div>
+                Reset Password: 
+            </div>
+            <div>
+                @Html.CheckBox("isPasswordReset", false)
+            </div>
+        }
         <br />
         <input type="submit" value="Update" />
     </div>

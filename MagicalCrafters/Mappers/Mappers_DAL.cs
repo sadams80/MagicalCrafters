@@ -58,8 +58,6 @@ namespace MagicalCrafters.Mappers
             user.UserName = userDAL.UserName;
             user.Password = userDAL.Password;
             user.Salt = userDAL.Salt;
-            user.isBlocked = userDAL.isBlocked;
-            user.User_Info.isFlagged = userDAL.User_Info.isFlagged;
             user.User_Info.Role_Id = userDAL.User_Info.Role_Id;
             user.User_Info.Source_Id = userDAL.User_Info.Source_Id;
             user.User_Info.House_Id = userDAL.User_Info.House_Id;
@@ -79,8 +77,6 @@ namespace MagicalCrafters.Mappers
             userDAL.UserName = user.UserName;
             userDAL.Password = user.Password;
             userDAL.Salt = user.Salt;
-            userDAL.isBlocked = user.isBlocked;
-            userDAL.User_Info.isFlagged = user.User_Info.isFlagged;
             userDAL.User_Info.Role_Id = user.User_Info.Role_Id;
             userDAL.User_Info.Source_Id = user.User_Info.Source_Id;
             userDAL.User_Info.House_Id = user.User_Info.House_Id;

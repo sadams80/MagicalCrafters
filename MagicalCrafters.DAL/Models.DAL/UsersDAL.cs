@@ -8,8 +8,6 @@ namespace MagicalCrafters.DAL.Models.DAL
         public string UserName { get; set; }
         public string Password { get; set; }
         public string Salt { get; set; }
-        public bool? isBlocked { get; set; }
-        public bool? isDeleted { get; set; }
         public Users_InfoDAL User_Info { get; set; }
 
         public UsersDAL()

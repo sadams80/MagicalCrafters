@@ -13,9 +13,6 @@ namespace MagicalCrafters.Models
         public int House_Id { get; set; }
         [Display(Name = "Email: ")]
         public string Email { get; set; }
-        [Display(Name = "Flagged: ")]
-        public bool? isFlagged { get; set; }
-        //public bool isDeleted { get; set; }
         [Display(Name = "Created Date: ")]
         public DateTime CreatedDate { get; set; }
         [Display(Name = "Last Modified By: ")]

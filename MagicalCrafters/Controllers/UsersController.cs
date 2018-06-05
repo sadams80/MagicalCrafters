@@ -83,22 +83,30 @@ namespace MagicalCrafters.Controllers
         #region Get
         public ActionResult GetUser(int userId)
         {
-            if (Session["User_Id"] != null && (int)Session["User_Id"] == userId || (int)Session["Role_Id"] == 3)
+            if (Session["User_Id"] != null)
             {
-                ViewModels userVM = new ViewModels();
-                userVM.SingleUser = _mappersDAL.Map(_userAccess.GetUser(userId));
-                return View(userVM);
+                if ((int)Session["User_Id"] == userId || (int)Session["Role_Id"] == 3)
+                {
+                    ViewModels userVM = new ViewModels();
+                    userVM.SingleUser = _mappersDAL.Map(_userAccess.GetUser(userId));
+                    return View(userVM);
+                }
+                return RedirectToAction("Index", "Home");
             }
             return RedirectToAction("Index", "Home");
         }
 
         public ActionResult GetUsers()
         {
-            if (Session["User_Id"] != null && (int)Session["Role_Id"] == 3)
+            if (Session["User_Id"] != null)
             {
-                ViewModels usersVM = new ViewModels();
-                usersVM.Users = _mappersDAL.Map(_userAccess.GetUsers());
-                return View(usersVM);
+                if ((int)Session["Role_Id"] == 3)
+                {
+                    ViewModels usersVM = new ViewModels();
+                    usersVM.Users = _mappersDAL.Map(_userAccess.GetUsers());
+                    return View(usersVM);
+                }
+                return RedirectToAction("Index", "Home");
             }
             return RedirectToAction("Index", "Home");
         }
@@ -168,56 +176,83 @@ namespace MagicalCrafters.Controllers
         [HttpGet]
         public ActionResult PatchUser(int userId)
         {
-            if (Session["User_Id"] != null && (int)Session["User_Id"] == userId || (int)Session["Role_Id"] == 3)
+            if (Session["User_Id"] != null)
             {
-                ViewModels user = new ViewModels();
-                user.SingleUser = _mappersDAL.Map(_userAccess.GetUser(userId));
-                return View(user);
+                if ((int)Session["User_Id"] == userId || (int)Session["Role_Id"] == 3)
+                {
+                    ViewModels user = new ViewModels();
+                    user.SingleUser = _mappersDAL.Map(_userAccess.GetUser(userId));
+                    return View(user);
+                }
+                return RedirectToAction("Index", "Home");
             }
             return RedirectToAction("Index", "Home");
         }
 
         [HttpPost]
-        public ActionResult PatchUser(ViewModels userToPatch)
+        public ActionResult PatchUser(ViewModels userToPatch, bool isPasswordReset)
         {
-            if (ModelState.IsValid)
+            if (Session["User_Id"] != null)
             {
-                Users userDb = _mappersDAL.Map(_userAccess.GetUser(userToPatch.SingleUser.User_Id));
-                if (userToPatch.SingleUser.User_Id == userDb.User_Id || (int)Session["Role_Id"] == 3)
+                if (ModelState.IsValid)
                 {
-                    userToPatch.SingleUser.UserName = userToPatch.SingleUser.UserName ?? userDb.UserName;
-                    //userToPatch.SingleUser.Salt = (userToPatch.SingleUser.Salt != userDb.Salt) ? _passwordBLL.CreateSalt() : userDb.Salt;
-                    //userToPatch.SingleUser.Password = (userToPatch.SingleUser.Password != userDb.Password) ? _passwordBLL.HashPassword(userToPatch.SingleUser.Password, userToPatch.SingleUser.Salt) : userDb.Password;
-                    //userToPatch.SingleUser.isBlocked = userToPatch.SingleUser.isBlocked ?? userDb.isBlocked;
-                    userToPatch.SingleUser.User_Info.Role_Id = userToPatch.SingleUser.User_Info.Role_Id ?? userDb.User_Info.Role_Id;
-                    userToPatch.SingleUser.User_Info.Email = userToPatch.SingleUser.User_Info.Email ?? userDb.User_Info.Email;
-                    userToPatch.SingleUser.User_Info.isFlagged = userToPatch.SingleUser.User_Info.isFlagged ?? userDb.User_Info.isFlagged;
-                    userToPatch.SingleUser.User_Info.LastModifiedBy = Session["UserName"].ToString();
-                    userToPatch.SingleUser.User_Info.LastModifiedDate = DateTime.Now;
-                    userToPatch.SingleUser.isDeleted = userToPatch.SingleUser.isDeleted ?? userDb.isDeleted;
-
-                    _userAccess.PatchUser(_mappersDAL.Map(userToPatch.SingleUser));
-                    ViewModels user = new ViewModels();
-                    user.SingleUser = _mappersDAL.Map(_userAccess.GetUser(userToPatch.SingleUser.User_Id));
-                    if (userToPatch.SingleUser.UserName == user.SingleUser.UserName && userToPatch.SingleUser.User_Info.Email == user.SingleUser.User_Info.Email)
+                    Users userDb = _mappersDAL.Map(_userAccess.GetUser(userToPatch.SingleUser.User_Id));
+                    if (userToPatch.SingleUser.User_Id == userDb.User_Id || (int)Session["Role_Id"] == 3)
                     {
-                        return RedirectToAction("GetUser", new { userId = user.SingleUser.User_Id });
+                        userToPatch.SingleUser.UserName = userToPatch.SingleUser.UserName ?? userDb.UserName;
+                        if (isPasswordReset)
+                        {
+                            userToPatch.SingleUser.Salt = _passwordBLL.CreateSalt();
+                            userToPatch.SingleUser.Password = _passwordBLL.HashPassword(userToPatch.SingleUser.Password, userToPatch.SingleUser.Salt);
+                        }
+                        userToPatch.SingleUser.User_Info.Role_Id = userToPatch.SingleUser.User_Info.Role_Id ?? userDb.User_Info.Role_Id;
+                        userToPatch.SingleUser.User_Info.Email = userToPatch.SingleUser.User_Info.Email ?? userDb.User_Info.Email;
+                        userToPatch.SingleUser.User_Info.LastModifiedBy = Session["UserName"].ToString();
+                        userToPatch.SingleUser.User_Info.LastModifiedDate = DateTime.Now;
+
+                        _userAccess.PatchUser(_mappersDAL.Map(userToPatch.SingleUser));
+                        ViewModels user = new ViewModels();
+                        user.SingleUser = _mappersDAL.Map(_userAccess.GetUser(userToPatch.SingleUser.User_Id));
+                        if (userToPatch.SingleUser.UserName == user.SingleUser.UserName && userToPatch.SingleUser.User_Info.Email == user.SingleUser.User_Info.Email)
+                        {
+                            Session["UserName"] = user.SingleUser.UserName;
+                            Session["Role_Id"] = user.SingleUser.User_Info.Role_Id;
+                            return RedirectToAction("GetUser", new { userId = user.SingleUser.User_Id });
+                        }
+                        return View(); //error message
                     }
                     return View(); //error message
                 }
-                return View(); //error message
+                return View(userToPatch); //error message
             }
-            return View(userToPatch); //error message
+            return RedirectToAction("Index", "Home");
         }
         #endregion
 
-        #region Delete
+        #region Delete / Block
         [HttpGet]
         public ActionResult DeleteUser(int userId)
         {
             if (Session["User_Id"] != null && (int)Session["User_Id"] == userId || (int)Session["Role_Id"] == 3)
             {
-                _userAccess.DeleteUser(userId);
+                _userAccess.DeleteUser(userId, (int)Session["User_Id"]);
+                Users userDb = _mappersDAL.Map(_userAccess.GetUser(userId));
+                if (userDb.UserName == null)
+                {
+                    Session.Clear();
+                    return RedirectToAction("Index", "Home");
+                }
+                return View("GetUser", new { userId }); //error message
+            }
+            return RedirectToAction("Index", "Home");
+        }
+
+        [HttpGet]
+        public ActionResult BlockUser(int userId)
+        {
+            if (Session["User_Id"] != null && (int)Session["User_Id"] == userId || (int)Session["Role_Id"] == 3)
+            {
+                _userAccess.BlockUser(userId, (int)Session["User_Id"]);
                 Users userDb = _mappersDAL.Map(_userAccess.GetUser(userId));
                 if (userDb.UserName == null)
                 {

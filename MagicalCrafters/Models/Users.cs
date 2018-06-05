@@ -18,9 +18,6 @@ namespace MagicalCrafters.Models
         //[Display(Name = "Confirm Password: ")]
         //public string ConfirmPassword { get; set; }
         public string Salt { get; set; }
-        [Display(Name = "Blocked")]
-        public bool? isBlocked { get; set; }
-        public bool? isDeleted { get; set; }
         public Users_Info User_Info { get; set; }
 
         public Users()
