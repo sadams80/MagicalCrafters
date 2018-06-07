@@ -5,24 +5,28 @@
 }
 
 <h2>Login</h2>
-
+<br />
+@if (TempData["Message"] != null)
+{
+    <h5>@TempData["Message"].ToString()</h5>
+}
 
 @using (Html.BeginForm("Login", "Users", FormMethod.Post))
 {
-<div>
     <div>
-        @Html.LabelFor(m => m.SingleUser.UserName)
-        @Html.TextBoxFor(m => m.SingleUser.UserName)
-    </div>
+        <div>
+            @Html.LabelFor(m => m.SingleUser.UserName)
+            @Html.TextBoxFor(m => m.SingleUser.UserName)
+        </div>
 
-    <div>
-        @Html.LabelFor(m => m.SingleUser.Password)
-        @Html.PasswordFor(m => m.SingleUser.Password)
-    </div>
+        <div>
+            @Html.LabelFor(m => m.SingleUser.Password)
+            @Html.PasswordFor(m => m.SingleUser.Password)
+        </div>
 
-    <div>
-        @*@Html.HiddenFor(m => m.SingleUser.ConfirmPassword)*@
-        <input type="submit" value="Login" />
+        <div>
+            @*@Html.HiddenFor(m => m.SingleUser.ConfirmPassword)*@
+            <input type="submit" value="Login" />
+        </div>
     </div>
-</div>
 }

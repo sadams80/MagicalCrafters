@@ -51,7 +51,7 @@ namespace MagicalCrafters.DAL
             {
                 using (StreamWriter writer = new StreamWriter(_errorLog))
                 {
-                    writer.WriteLine(DateTime.Now + " Get UserbyId Exception: " + error + "/r/n");
+                    writer.WriteLine(DateTime.Now + " Get UserbyId Data Access Exception: " + error + "/r/n");
                 }
             }
             finally
@@ -87,7 +87,7 @@ namespace MagicalCrafters.DAL
             {
                 using (StreamWriter writer = new StreamWriter(_errorLog))
                 {
-                    writer.WriteLine(DateTime.Now + " Get User By Username Exception: " + error + "/r/n");
+                    writer.WriteLine(DateTime.Now + " Get User By Username Data Access Exception: " + error + "/r/n");
                 }
             }
             finally
@@ -115,7 +115,7 @@ namespace MagicalCrafters.DAL
             {
                 using (StreamWriter writer = new StreamWriter(_errorLog))
                 {
-                    writer.WriteLine(DateTime.Now + " View Users Exception: " + error + "/r/n");
+                    writer.WriteLine(DateTime.Now + " View Users Data Access Exception: " + error + "/r/n");
                 }
             }
             finally
@@ -147,7 +147,7 @@ namespace MagicalCrafters.DAL
             {
                 using (StreamWriter writer = new StreamWriter(_errorLog))
                 {
-                    writer.WriteLine(DateTime.Now + " Post User Exception: " + error + "/r/n");
+                    writer.WriteLine(DateTime.Now + " Post User Data Access Exception: " + error + "/r/n");
                 }
             }
             finally
@@ -179,7 +179,7 @@ namespace MagicalCrafters.DAL
             {
                 using (StreamWriter writer = new StreamWriter(_errorLog))
                 {
-                    writer.WriteLine(DateTime.Now + " Patch User Exception: " + error + "/r/n");
+                    writer.WriteLine(DateTime.Now + " Patch User Data Access Exception: " + error + "/r/n");
                 }
             }
             finally
@@ -208,7 +208,7 @@ namespace MagicalCrafters.DAL
             {
                 using (StreamWriter writer = new StreamWriter(_errorLog))
                 {
-                    writer.WriteLine(DateTime.Now + " Delete User Exception: " + error + "/r/n");
+                    writer.WriteLine(DateTime.Now + " Delete User Data Access Exception: " + error + "/r/n");
                 }
             }
             finally
@@ -235,7 +235,7 @@ namespace MagicalCrafters.DAL
             {
                 using (StreamWriter writer = new StreamWriter(_errorLog))
                 {
-                    writer.WriteLine(DateTime.Now + " Block User Exception: " + error + "/r/n");
+                    writer.WriteLine(DateTime.Now + " Block User Data Access Exception: " + error + "/r/n");
                 }
             }
             finally

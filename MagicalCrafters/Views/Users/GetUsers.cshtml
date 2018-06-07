@@ -6,7 +6,11 @@
 }
 
 <h2>View Users</h2>
-
+<br />
+@if (TempData["Message"] != null)
+{
+    <h5>@TempData["Message"].ToString()</h5>
+}
 <table class="table" tableFormat>
     <tr>
         <th>@Html.LabelFor(m => m.SingleUser.UserName)</th>
@@ -17,12 +21,12 @@
     </tr>
     @foreach (Users user in Model.Users)
     {
-    <tr>
-        <td>@Html.DisplayFor(m => user.UserName)</td>
-        <td>@Html.DisplayFor(m => user.User_Info.Email)</td>
-        <td>@Html.DisplayFor(m => user.User_Info.House.Name)</td>
-        @*<td>@Html.DisplayFor(m => user.User_Info.Role.Name)</td>*@
-        <td>@Html.ActionLink("View", "GetUser", "Users", routeValues: new { userId = user.User_Id }, htmlAttributes: new { @class = "btn btn-sm btn-primary" })</td>
-    </tr>
+        <tr>
+            <td>@Html.DisplayFor(m => user.UserName)</td>
+            <td>@Html.DisplayFor(m => user.User_Info.Email)</td>
+            <td>@Html.DisplayFor(m => user.User_Info.House.Name)</td>
+            @*<td>@Html.DisplayFor(m => user.User_Info.Role.Name)</td>*@
+            <td>@Html.ActionLink("View", "GetUser", "Users", routeValues: new { userId = user.User_Id }, htmlAttributes: new { @class = "btn btn-sm btn-primary" })</td>
+        </tr>
     }
 </table>

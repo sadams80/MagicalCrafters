@@ -13,7 +13,6 @@ namespace MagicalCrafters.Mappers
             user.UserName = userBLL.UserName;
             user.Password = userBLL.Password;
             user.Salt = userBLL.Salt;
-            user.isBlocked = userBLL.isBlocked;
             user.User_Info.Role_Id = userBLL.User_Info.Role_Id;
             user.User_Info.Source_Id = userBLL.User_Info.Source_Id;
             user.User_Info.House_Id = userBLL.User_Info.House_Id;
@@ -32,7 +31,6 @@ namespace MagicalCrafters.Mappers
             userBLL.UserName = user.UserName;
             userBLL.Password = user.Password;
             userBLL.Salt = user.Salt;
-            userBLL.isBlocked = user.isBlocked;
             userBLL.User_Info.Role_Id = user.User_Info.Role_Id;
             userBLL.User_Info.Source_Id = user.User_Info.Source_Id;
             userBLL.User_Info.House_Id = user.User_Info.House_Id;

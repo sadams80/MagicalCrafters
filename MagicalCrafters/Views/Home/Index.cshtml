@@ -4,4 +4,9 @@
 }
 
 <h2>Home</h2>
+<br />
 
+@if (TempData["Message"] != null)
+{
+    <h5>@TempData["Message"].ToString()</h5>
+}

@@ -5,40 +5,61 @@
     ViewBag.Title = "Update User";
 }
 
-<h2>Update User</h2>
+<h2>Update User: @Model.SingleUser.UserName</h2>
 <br />
-<br />
+@if (TempData["Message"] != null)
+{
+    <h5>@TempData["Message"].ToString()</h5>
+}
 
 @using (Html.BeginForm("PatchUser", "Users", FormMethod.Post))
 {
     @Html.HiddenFor(m => m.SingleUser.User_Id)
     <div>
-        <div>
-            @Html.LabelFor(m => m.SingleUser.UserName)
-        </div>
-        <div>
-            @Html.TextBoxFor(m => m.SingleUser.UserName)
-        </div>
-        <div>
-            @Html.LabelFor(m => m.SingleUser.User_Info.Email)
-        </div>
-        <div>
-            @Html.TextBoxFor(m => m.SingleUser.User_Info.Email)
-        </div>
-        @if ((int)Session["Role_Id"] == 3)
+        @if ((int)Session["User_Id"] == Model.SingleUser.User_Id)
         {
             <div>
-                @Html.LabelFor(m => m.SingleUser.User_Info.Role_Id)
+                @Html.LabelFor(m => m.SingleUser.UserName)
             </div>
             <div>
-                @Html.TextBoxFor(m => m.SingleUser.User_Info.Role_Id)
+                @Html.TextBoxFor(m => m.SingleUser.UserName)
             </div>
             <div>
-                Reset Password: 
+                @Html.LabelFor(m => m.SingleUser.User_Info.Email)
             </div>
             <div>
+                @Html.TextBoxFor(m => m.SingleUser.User_Info.Email)
+            </div>
+        }
+        @if ((int)Session["Role_Id"] > 1)
+        {
+            <div>
+                @Html.LabelFor(m => m.SingleUser.UserName)
+            </div>
+            <div>
+                @Html.DisplayFor(m => m.SingleUser.UserName)
+            </div>
+            <div>
+                @Html.LabelFor(m => m.SingleUser.User_Info.Email)
+            </div>
+            <div>
+                @Html.DisplayFor(m => m.SingleUser.User_Info.Email)
+            </div>
+            if ((int)Session["Role_Id"] == 3)
+            {
+                <div>
+                    @Html.LabelFor(m => m.SingleUser.User_Info.Role_Id)
+                </div>
+                <div>
+                    @Html.TextBoxFor(m => m.SingleUser.User_Info.Role_Id)
+                </div>
+            }
+            <div>
+                Reset Password:
+            </div>
+            @*<div>
                 @Html.CheckBox("isPasswordReset", false)
-            </div>
+            </div>*@
         }
         <br />
         <input type="submit" value="Update" />

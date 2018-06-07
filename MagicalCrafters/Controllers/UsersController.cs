@@ -8,6 +8,8 @@ using MagicalCrafters.Mappers;
 using MagicalCrafters.DAL;
 using MagicalCrafters.DAL.Models.DAL;
 using MagicalCrafters.BLL;
+using System.Configuration;
+using System.IO;
 
 namespace MagicalCrafters.Controllers
 {
@@ -20,6 +22,8 @@ namespace MagicalCrafters.Controllers
         public static PasswordBLL _passwordBLL = new PasswordBLL();
         public static Mappers_DAL _mappersDAL = new Mappers_DAL();
         public static Mappers_BLL _mappersBLL = new Mappers_BLL();
+
+        static string _errorLog = ConfigurationManager.ConnectionStrings["ErrorLog"].ConnectionString;
         #endregion
 
         #region Index
@@ -43,72 +47,120 @@ namespace MagicalCrafters.Controllers
         [HttpPost]
         public ActionResult Login(ViewModels userToLogin)
         {
-            if (ModelState.IsValid)
+            try
             {
-                Users userDB = _mappersDAL.Map(_userAccess.GetUserByUserName(userToLogin.SingleUser.UserName));
-                if (userDB.UserName == userToLogin.SingleUser.UserName)
+                if (ModelState.IsValid)
                 {
-                    userToLogin.SingleUser.Password = _passwordBLL.HashPassword(userToLogin.SingleUser.Password, userDB.Salt);
-                    bool isValid = _passwordBLL.ValidatePassword(userDB.Password, userToLogin.SingleUser.Password);
-
-                    if (isValid)
+                    Users userDB = _mappersDAL.Map(_userAccess.GetUserByUserName(userToLogin.SingleUser.UserName));
+                    if (userDB.UserName == userToLogin.SingleUser.UserName)
                     {
-                        Users user = _mappersDAL.Map(_userAccess.GetUser(userDB.User_Id));
-                        Session["User_Id"] = user.User_Id;
-                        Session["UserName"] = user.UserName;
-                        Session["Role_Id"] = user.User_Info.Role_Id;
-                        Session["House_Id"] = user.User_Info.House_Id;
-                        Session["Points"] = user.User_Info.Points;
+                        userToLogin.SingleUser.Password = _passwordBLL.HashPassword(userToLogin.SingleUser.Password, userDB.Salt);
+                        bool isValid = _passwordBLL.ValidatePassword(userDB.Password, userToLogin.SingleUser.Password);
 
-                        return RedirectToAction("Index", "Home");
+                        if (isValid)
+                        {
+                            Users user = _mappersDAL.Map(_userAccess.GetUser(userDB.User_Id));
+                            Session["User_Id"] = user.User_Id;
+                            Session["UserName"] = user.UserName;
+                            Session["Role_Id"] = user.User_Info.Role_Id;
+                            Session["House_Id"] = user.User_Info.House_Id;
+                            Session["Points"] = user.User_Info.Points;
+
+                            return RedirectToAction("Index", "Home");
+                        }
+                        return View(userToLogin);
                     }
                     return View(userToLogin);
                 }
                 return View(userToLogin);
             }
-            return View(userToLogin);
+            catch (Exception ex)
+            {
+                using (StreamWriter writer = new StreamWriter(_errorLog))
+                {
+                    writer.WriteLine(DateTime.Now + " Login Presentation Layer Exception: " + ex + "/r/n");
+                }
+                TempData["Message"] = "There was an error updating the account. Please try again later.";
+                return View(userToLogin);
+            }
         }
 
         public ActionResult Logout()
         {
-            if (Session["User_Id"] != null)
+            try
             {
-                Session.Clear();
+                if (Session["User_Id"] != null)
+                {
+                    Session.Clear();
+                    return RedirectToAction("Index", "Home");
+                }
+                return RedirectToAction("Login");
+            }
+            catch (Exception ex)
+            {
+                using (StreamWriter writer = new StreamWriter(_errorLog))
+                {
+                    writer.WriteLine(DateTime.Now + " Login Presentation Layer Exception: " + ex + "/r/n");
+                }
+                TempData["Message"] = "There was an error updating the account. Please try again later.";
                 return RedirectToAction("Index", "Home");
             }
-            return RedirectToAction("Login");
         }
         #endregion
 
         #region Get
         public ActionResult GetUser(int userId)
         {
-            if (Session["User_Id"] != null)
+            try
             {
-                if ((int)Session["User_Id"] == userId || (int)Session["Role_Id"] == 3)
+                if (Session["User_Id"] != null)
                 {
-                    ViewModels userVM = new ViewModels();
-                    userVM.SingleUser = _mappersDAL.Map(_userAccess.GetUser(userId));
-                    return View(userVM);
+                    if ((int)Session["User_Id"] == userId || (int)Session["Role_Id"] == 3)
+                    {
+                        ViewModels userVM = new ViewModels();
+                        userVM.SingleUser = _mappersDAL.Map(_userAccess.GetUser(userId));
+                        return View(userVM);
+                    }
+                    return RedirectToAction("Index", "Home");
                 }
                 return RedirectToAction("Index", "Home");
             }
-            return RedirectToAction("Index", "Home");
+            catch (Exception ex)
+            {
+                using (StreamWriter writer = new StreamWriter(_errorLog))
+                {
+                    writer.WriteLine(DateTime.Now + " Get User Presentation Layer Exception: " + ex + "/r/n");
+                }
+                TempData["Message"] = "There was an error getting the account. Please try again later.";
+                return RedirectToAction("Index", "Home");
+            }
         }
 
         public ActionResult GetUsers()
         {
-            if (Session["User_Id"] != null)
+            try
             {
-                if ((int)Session["Role_Id"] == 3)
+                if (Session["User_Id"] != null)
                 {
-                    ViewModels usersVM = new ViewModels();
-                    usersVM.Users = _mappersDAL.Map(_userAccess.GetUsers());
-                    return View(usersVM);
+                    if ((int)Session["Role_Id"] == 3)
+                    {
+                        ViewModels usersVM = new ViewModels();
+                        usersVM.Users = _mappersDAL.Map(_userAccess.GetUsers());
+                        return View(usersVM);
+                    }
+                    return RedirectToAction("Index", "Home");
                 }
                 return RedirectToAction("Index", "Home");
             }
-            return RedirectToAction("Index", "Home");
+            catch (Exception ex)
+            {
+                using (StreamWriter writer = new StreamWriter(_errorLog))
+                {
+                    writer.WriteLine(DateTime.Now + " Get Users Presentation Layer Exception: " + ex + "/r/n");
+                }
+                TempData["Message"] = "There was an error getting the page. Please try again later.";
+                return RedirectToAction("Index", "Home");
+            }
         }
         #endregion
 
@@ -126,48 +178,63 @@ namespace MagicalCrafters.Controllers
         [HttpPost]
         public ActionResult PostUser(ViewModels userToPost)
         {
-            if (ModelState.IsValid)
+            try
             {
-                Users userDb = _mappersDAL.Map(_userAccess.GetUserByUserName(userToPost.SingleUser.UserName));
-                if (userDb.UserName == null)
+                if (ModelState.IsValid)
                 {
-                    userToPost.SingleUser.Salt = _passwordBLL.CreateSalt();
-                    userToPost.SingleUser.Password = _passwordBLL.HashPassword(userToPost.SingleUser.Password, userToPost.SingleUser.Salt);
-                    _userAccess.PostUser(_mappersDAL.Map(userToPost.SingleUser));
-
-                    Users newUser = _mappersDAL.Map(_userAccess.GetUserByUserName(userToPost.SingleUser.UserName));
-
-                    if (newUser != null)
+                    Users userDb = _mappersDAL.Map(_userAccess.GetUserByUserName(userToPost.SingleUser.UserName));
+                    if (userDb.UserName == null)
                     {
-                        _houseAccess.PostPoints(5, userToPost.SingleUser.User_Info.House_Id);
-                        if (userToPost.SingleUser.User_Info.House_Id == 1)
+                        userToPost.SingleUser.Salt = _passwordBLL.CreateSalt();
+                        userToPost.SingleUser.Password = _passwordBLL.HashPassword(userToPost.SingleUser.Password, userToPost.SingleUser.Salt);
+                        _userAccess.PostUser(_mappersDAL.Map(userToPost.SingleUser));
+
+                        Users newUser = _mappersDAL.Map(_userAccess.GetUserByUserName(userToPost.SingleUser.UserName));
+
+                        if (newUser != null)
                         {
-                            TempData["UserCreateSuccess"] = "5 points to GRYFFINDOR!";
+                            _houseAccess.PostPoints(5, userToPost.SingleUser.User_Info.House_Id);
+                            if (userToPost.SingleUser.User_Info.House_Id == 1)
+                            {
+                                TempData["Message"] = "5 points to GRYFFINDOR!";
+                            }
+                            else if (userToPost.SingleUser.User_Info.House_Id == 2)
+                            {
+                                TempData["Message"] = "5 points to SLYTHERIN!";
+                            }
+                            else if (userToPost.SingleUser.User_Info.House_Id == 3)
+                            {
+                                TempData["Message"] = "5 points to RAVENCLAW!";
+                            }
+                            else if (userToPost.SingleUser.User_Info.House_Id == 4)
+                            {
+                                TempData["Message"] = "5 points to HUFFLEPUFF!";
+                            }
+                            return RedirectToAction("Login", "Users", new { area = "" });
                         }
-                        else if (userToPost.SingleUser.User_Info.House_Id == 2)
+                        else
                         {
-                            TempData["UserCreateSuccess"] = "5 points to SLYTHERIN!";
+                            TempData["Message"] = "There was an error creating the account. Please try again later.";
+                            return View(userToPost);
                         }
-                        else if (userToPost.SingleUser.User_Info.House_Id == 3)
-                        {
-                            TempData["UserCreateSuccess"] = "5 points to RAVENCLAW!";
-                        }
-                        else if (userToPost.SingleUser.User_Info.House_Id == 4)
-                        {
-                            TempData["UserCreateSuccess"] = "5 points to HUFFLEPUFF!";
-                        }
-                        return RedirectToAction("Login", "Users", new { area = "" });
                     }
-                    else
-                    {
-                        return View(userToPost); //creation error
-                    }
+                    TempData["Message"] = "Username is already in use.";
+                    return View(userToPost);
                 }
-                return View(userToPost); //username error
+                else
+                {
+                    TempData["Message"] = "Please enter valid data in all fields";
+                    return View(userToPost);
+                }
             }
-            else
+            catch (Exception ex)
             {
-                return View(userToPost); //error
+                using (StreamWriter writer = new StreamWriter(_errorLog))
+                {
+                    writer.WriteLine(DateTime.Now + " Post User Presentation Layer Exception: " + ex + "/r/n");
+                }
+                TempData["Message"] = "There was an error creating the account. Please try again later.";
+                return View(userToPost);
             }
         }
         #endregion
@@ -184,48 +251,79 @@ namespace MagicalCrafters.Controllers
                     user.SingleUser = _mappersDAL.Map(_userAccess.GetUser(userId));
                     return View(user);
                 }
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "Home"); //404 error page
             }
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Login");
         }
 
         [HttpPost]
-        public ActionResult PatchUser(ViewModels userToPatch, bool isPasswordReset)
+        public ActionResult PatchUser(ViewModels userToPatch/*, bool isPasswordReset*/)
         {
-            if (Session["User_Id"] != null)
+            try
             {
-                if (ModelState.IsValid)
+                if (Session["User_Id"] != null)
                 {
-                    Users userDb = _mappersDAL.Map(_userAccess.GetUser(userToPatch.SingleUser.User_Id));
-                    if (userToPatch.SingleUser.User_Id == userDb.User_Id || (int)Session["Role_Id"] == 3)
+                    if (userToPatch.SingleUser.User_Id == (int)Session["User_Id"] || (int)Session["Role_Id"] == 3)
                     {
-                        userToPatch.SingleUser.UserName = userToPatch.SingleUser.UserName ?? userDb.UserName;
-                        if (isPasswordReset)
+                        if (ModelState.IsValid)
                         {
-                            userToPatch.SingleUser.Salt = _passwordBLL.CreateSalt();
-                            userToPatch.SingleUser.Password = _passwordBLL.HashPassword(userToPatch.SingleUser.Password, userToPatch.SingleUser.Salt);
-                        }
-                        userToPatch.SingleUser.User_Info.Role_Id = userToPatch.SingleUser.User_Info.Role_Id ?? userDb.User_Info.Role_Id;
-                        userToPatch.SingleUser.User_Info.Email = userToPatch.SingleUser.User_Info.Email ?? userDb.User_Info.Email;
-                        userToPatch.SingleUser.User_Info.LastModifiedBy = Session["UserName"].ToString();
-                        userToPatch.SingleUser.User_Info.LastModifiedDate = DateTime.Now;
+                            Users userDb = _mappersDAL.Map(_userAccess.GetUser(userToPatch.SingleUser.User_Id));
+                            userToPatch.SingleUser.UserName = userToPatch.SingleUser.UserName ?? userDb.UserName;
+                            //if (isPasswordReset)
+                            //{
+                            //    userToPatch.SingleUser.Salt = _passwordBLL.CreateSalt();
+                            //    userToPatch.SingleUser.Password = _passwordBLL.HashPassword(_passwordBLL.CreateSalt(), userToPatch.SingleUser.Salt); //figure out a way to send random string to user
+                            //}
+                            userToPatch.SingleUser.User_Info.Role_Id = userToPatch.SingleUser.User_Info.Role_Id ?? userDb.User_Info.Role_Id;
+                            userToPatch.SingleUser.User_Info.Email = userToPatch.SingleUser.User_Info.Email ?? userDb.User_Info.Email;
+                            if (userToPatch.SingleUser.User_Id == (int)Session["User_Id"])
+                            {
+                                userToPatch.SingleUser.User_Info.LastModifiedBy = userToPatch.SingleUser.UserName;
+                            }
+                            else
+                            {
+                                userToPatch.SingleUser.User_Info.LastModifiedBy = Session["UserName"].ToString();
+                            }
+                            userToPatch.SingleUser.User_Info.LastModifiedDate = DateTime.Now;
 
-                        _userAccess.PatchUser(_mappersDAL.Map(userToPatch.SingleUser));
-                        ViewModels user = new ViewModels();
-                        user.SingleUser = _mappersDAL.Map(_userAccess.GetUser(userToPatch.SingleUser.User_Id));
-                        if (userToPatch.SingleUser.UserName == user.SingleUser.UserName && userToPatch.SingleUser.User_Info.Email == user.SingleUser.User_Info.Email)
-                        {
-                            Session["UserName"] = user.SingleUser.UserName;
-                            Session["Role_Id"] = user.SingleUser.User_Info.Role_Id;
-                            return RedirectToAction("GetUser", new { userId = user.SingleUser.User_Id });
+                            _userAccess.PatchUser(_mappersDAL.Map(userToPatch.SingleUser));
+                            ViewModels user = new ViewModels();
+                            user.SingleUser = _mappersDAL.Map(_userAccess.GetUser(userToPatch.SingleUser.User_Id));
+                            if (userToPatch.SingleUser.UserName == user.SingleUser.UserName && userToPatch.SingleUser.User_Info.Email == user.SingleUser.User_Info.Email)
+                            {
+                                Session["UserName"] = user.SingleUser.UserName;
+                                Session["Role_Id"] = user.SingleUser.User_Info.Role_Id;
+                                return RedirectToAction("GetUser", new { userId = user.SingleUser.User_Id });
+                            }
+                            TempData["Message"] = "There was an error updating the account. Please try again later.";
                         }
-                        return View(); //error message
+                        TempData["Message"] = "Please enter valid data in all fields.";
                     }
-                    return View(); //error message
+                    return View(userToPatch); //404 error page
                 }
-                return View(userToPatch); //error message
+                return RedirectToAction("Login");
             }
-            return RedirectToAction("Index", "Home");
+            catch (Exception ex)
+            {
+                using (StreamWriter writer = new StreamWriter(_errorLog))
+                {
+                    writer.WriteLine(DateTime.Now + " Patch User Presentation Layer Exception: " + ex + "/r/n");
+                }
+                TempData["Message"] = "There was an error updating the account. Please try again later.";
+                return View(userToPatch);
+            }
+        }
+
+        [HttpGet]
+        public ActionResult PatchPassword(int userId)
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult PatchPassword(int userId, string newPassword)
+        {
+            return View();
         }
         #endregion
 
@@ -233,35 +331,61 @@ namespace MagicalCrafters.Controllers
         [HttpGet]
         public ActionResult DeleteUser(int userId)
         {
-            if (Session["User_Id"] != null && (int)Session["User_Id"] == userId || (int)Session["Role_Id"] == 3)
+            try
             {
-                _userAccess.DeleteUser(userId, (int)Session["User_Id"]);
-                Users userDb = _mappersDAL.Map(_userAccess.GetUser(userId));
-                if (userDb.UserName == null)
+                if (Session["User_Id"] != null && (int)Session["User_Id"] == userId || (int)Session["Role_Id"] == 3)
                 {
-                    Session.Clear();
-                    return RedirectToAction("Index", "Home");
+                    _userAccess.DeleteUser(userId, (int)Session["User_Id"]);
+                    Users userDb = _mappersDAL.Map(_userAccess.GetUser(userId));
+                    if (userDb.UserName == null)
+                    {
+                        Session.Clear();
+                        return RedirectToAction("Index", "Home");
+                    }
+                    TempData["Message"] = "There was an error deleting the account. Please try again later.";
+                    return View("GetUser", new { userId });
                 }
-                return View("GetUser", new { userId }); //error message
+                return RedirectToAction("Index", "Home");
             }
-            return RedirectToAction("Index", "Home");
+            catch (Exception ex)
+            {
+                using (StreamWriter writer = new StreamWriter(_errorLog))
+                {
+                    writer.WriteLine(DateTime.Now + " Delete User Presentation Layer Exception: " + ex + "/r/n");
+                }
+                TempData["Message"] = "There was an error deleting the account. Please try again later.";
+                return View("GetUser", new { userId });
+            }
         }
 
         [HttpGet]
         public ActionResult BlockUser(int userId)
         {
-            if (Session["User_Id"] != null && (int)Session["User_Id"] == userId || (int)Session["Role_Id"] == 3)
+            try
             {
-                _userAccess.BlockUser(userId, (int)Session["User_Id"]);
-                Users userDb = _mappersDAL.Map(_userAccess.GetUser(userId));
-                if (userDb.UserName == null)
+                if (Session["User_Id"] != null && (int)Session["User_Id"] == userId || (int)Session["Role_Id"] == 3)
                 {
-                    Session.Clear();
-                    return RedirectToAction("Index", "Home");
+                    _userAccess.BlockUser(userId, (int)Session["User_Id"]);
+                    Users userDb = _mappersDAL.Map(_userAccess.GetUser(userId));
+                    if (userDb.UserName == null)
+                    {
+                        Session.Clear();
+                        return RedirectToAction("Index", "Home");
+                    }
+                    TempData["Message"] = "There was an error blocking the account. Please try again later.";
+                    return View("GetUser", new { userId }); //error message
                 }
-                return View("GetUser", new { userId = userId }); //error message
+                return RedirectToAction("Index", "Home");
             }
-            return RedirectToAction("Index", "Home");
+            catch (Exception ex)
+            {
+                using (StreamWriter writer = new StreamWriter(_errorLog))
+                {
+                    writer.WriteLine(DateTime.Now + " Delete User Presentation Layer Exception: " + ex + "/r/n");
+                }
+                TempData["Message"] = "There was an error blocking the account. Please try again later.";
+                return View("GetUser", new { userId });
+            }
         }
         #endregion
     }
